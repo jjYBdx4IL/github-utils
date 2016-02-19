@@ -222,8 +222,8 @@ public class Desktop {
     }
 
     private static boolean isXDG() {
-        String xdgDesktop = System.getenv("XDG_SESSION_ID");
-        return xdgDesktop != null && !xdgDesktop.isEmpty();
+        String xdgSessionId = System.getenv("XDG_SESSION_ID");
+        return xdgSessionId != null && !xdgSessionId.isEmpty();
     }
 
     private static boolean isGNOME() {
