@@ -18,8 +18,10 @@ import org.apache.commons.lang3.SystemUtils;
 import org.apache.log4j.Logger;
 
 /**
- * Based on work from sbk
+ * Based on work from http://stackoverflow.com/users/2180189/mightypork
+ *
  * http://stackoverflow.com/questions/18004150/desktop-api-is-not-supported-on-the-current-platform
+ * 
  * @author jjYBdx4IL
  */
 public class Desktop {
