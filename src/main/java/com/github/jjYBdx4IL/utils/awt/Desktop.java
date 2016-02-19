@@ -28,7 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.SystemUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Based on work from http://stackoverflow.com/users/2180189/mightypork
@@ -39,7 +40,7 @@ import org.apache.log4j.Logger;
  */
 public class Desktop {
 
-    private final static Logger log = Logger.getLogger(Desktop.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(Desktop.class);
 
     public static boolean browse(URI uri) {
 
