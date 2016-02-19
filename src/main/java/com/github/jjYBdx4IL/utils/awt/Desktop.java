@@ -30,8 +30,6 @@ public class Desktop {
 
     public static boolean browse(URI uri) {
 
-        log.warn(String.format("failed to browse %s", uri));
-
         if (browseDESKTOP(uri)) return true;
 
         if (openSystemSpecific(uri.toString())) return true;
