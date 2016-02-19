@@ -1,6 +1,6 @@
 /*
  * #%L
- * Shared Package
+ * github-utils
  * %%
  * Copyright (C) 2016 jjYBdx4IL
  * %%
