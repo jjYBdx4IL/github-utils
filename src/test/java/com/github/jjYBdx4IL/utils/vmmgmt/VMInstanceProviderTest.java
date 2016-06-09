@@ -13,31 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jjYBdx4IL.utils.cli;
+package com.github.jjYBdx4IL.utils.vmmgmt;
 
-import java.util.ListIterator;
+import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.ParseException;
+import net.schmizz.sshj.connection.channel.direct.Session.Command;
+
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 /**
  *
  * @author jjYBdx4IL
  */
-public class ExtendedGnuParser extends GnuParser {
+public class VMInstanceProviderTest {
 
-    private boolean ignoreUnrecognizedOption;
-
-    public ExtendedGnuParser(final boolean ignoreUnrecognizedOption) {
-        this.ignoreUnrecognizedOption = ignoreUnrecognizedOption;
-    }
-
-    @Override
-    protected void processOption(final String arg, final ListIterator iter) throws ParseException {
-        boolean hasOption = getOptions().hasOption(arg);
-
-        if (hasOption || !ignoreUnrecognizedOption) {
-            super.processOption(arg, iter);
+    @Test
+    public void testCreateVM() throws Exception {
+        try (VMInstanceProvider vmip = new VMInstanceProvider()) {
+            VMData vm = vmip.createVM(OS.UbuntuWilyAmd64);
+            Command cmd = vm.getSSHSession().exec("true");
+            cmd.join(15, TimeUnit.SECONDS);
+            assertEquals(0, cmd.getExitStatus().intValue());
         }
     }
 

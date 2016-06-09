@@ -13,32 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jjYBdx4IL.utils.cli;
-
-import java.util.ListIterator;
-
-import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.ParseException;
+package com.github.jjYBdx4IL.utils.vmmgmt;
 
 /**
  *
  * @author jjYBdx4IL
  */
-public class ExtendedGnuParser extends GnuParser {
+public class PathMapping {
 
-    private boolean ignoreUnrecognizedOption;
+    private String source;
+    private String destination;
 
-    public ExtendedGnuParser(final boolean ignoreUnrecognizedOption) {
-        this.ignoreUnrecognizedOption = ignoreUnrecognizedOption;
+    /**
+     * @return the source
+     */
+    public String getSource() {
+        return source;
     }
 
-    @Override
-    protected void processOption(final String arg, final ListIterator iter) throws ParseException {
-        boolean hasOption = getOptions().hasOption(arg);
+    /**
+     * @param source the source to set
+     */
+    public void setSource(String source) {
+        this.source = source;
+    }
 
-        if (hasOption || !ignoreUnrecognizedOption) {
-            super.processOption(arg, iter);
-        }
+    /**
+     * @return the destination
+     */
+    public String getDestination() {
+        return destination;
+    }
+
+    /**
+     * @param destination the destination to set
+     */
+    public void setDestination(String destination) {
+        this.destination = destination;
     }
 
 }
