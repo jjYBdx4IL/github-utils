@@ -87,28 +87,39 @@ public class FloatArrayHistory {
     }
 
     /**
+     * Uses default locale.
+     *
      * @param start inclusive
      * @param end exclusive
      * @return
      */
     public String toString(int start, int end) {
+        return toString(start, end, Locale.getDefault());
+    }
+
+    public String toString(int start, int end, Locale locale) {
         StringBuilder sb = new StringBuilder(9 * (end - start));
         for (int i = start; i < end; i++) {
             if (sb.length() > 0) {
                 sb.append(" ");
             }
-            sb.append(String.format(Locale.ROOT, "%f", get(i)));
+            sb.append(String.format(locale, "%f", get(i)));
         }
         return sb.toString();
     }
 
     /**
      * Returns as a {@link String} all elements starting at {@literal start}.
+     * Uses default locale.
      *
      * @param start
      * @return
      */
     public String toString(int start) {
-        return toString(start, h.length);
+        return toString(start, h.length, Locale.getDefault());
+    }
+
+    public String toString(int start, Locale locale) {
+        return toString(start, h.length, locale);
     }
 }

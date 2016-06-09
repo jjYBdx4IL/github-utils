@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.github.jjYBdx4IL</groupId>
         <artifactId>github-parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
         <relativePath>../github-parent</relativePath>
     </parent>
     
@@ -41,10 +41,10 @@
         </developer>
     </developers>
     
-    <ciManagement>
+    <issueManagement>
         <system>Github Issues</system>
         <url>https://github.com/jjYBdx4IL/github-utils/issues</url>
-    </ciManagement>
+    </issueManagement>
     
     <scm>
         <connection>scm:git:git://github.com/jjYBdx4IL/github-utils.git</connection>
@@ -52,12 +52,29 @@
         <url>https://github.com/jjYBdx4IL/github-utils</url>
         <tag>HEAD</tag>
     </scm>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <!-- our own modules first -->
         <dependency>
             <groupId>com.github.jjYBdx4IL</groupId>
             <artifactId>github-test-utils</artifactId>
+            <version>1.0</version>
             <scope>test</scope>
         </dependency>
 
