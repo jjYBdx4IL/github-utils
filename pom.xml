@@ -10,7 +10,7 @@
     </parent>
     
     <artifactId>github-utils</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
     <name>github-utils</name>
     <description>collection of small stuff</description>
@@ -50,7 +50,7 @@
         <connection>scm:git:git://github.com/jjYBdx4IL/github-utils.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/jjYBdx4IL/github-utils.git</developerConnection>
         <url>https://github.com/jjYBdx4IL/github-utils</url>
-        <tag>HEAD</tag>
+        <tag>1.0</tag>
     </scm>
     
     <build>
