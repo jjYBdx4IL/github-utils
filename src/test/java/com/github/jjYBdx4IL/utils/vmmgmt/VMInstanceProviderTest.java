@@ -20,6 +20,8 @@ import java.util.concurrent.TimeUnit;
 import net.schmizz.sshj.connection.channel.direct.Session.Command;
 
 import static org.junit.Assert.assertEquals;
+import org.junit.Assume;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -27,6 +29,11 @@ import org.junit.Test;
  * @author jjYBdx4IL
  */
 public class VMInstanceProviderTest {
+
+    @BeforeClass
+    public static void beforeClass() {
+        Assume.assumeTrue(LibvirtUtils.isAvailable());
+    }
 
     @Test
     public void testCreateVM() throws Exception {
