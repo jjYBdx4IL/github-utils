@@ -24,12 +24,13 @@ import com.sun.jna.NativeLibrary;
 public class LibvirtUtils {
 
     /**
-     * Checks whether this VMInstanceProvider can be run on the current platform.
+     * Checks whether vmmgmt classes can be run on the current platform, ie. whether libvirt is available.
      * Needs additional work, ie. a check for QEMU tooling.
      * <p>
      * Beware! In order for this function to work, the class must NOT reference any libvirt classes!
      * The static initialization might trigger an error due to a try to load the library without
-     * catching the error.
+     * catching the error. If you are using this with junit's assume functions, put it into
+     * a static function annotated with {@link org.junit.BeforeClass}.
      *
      * @return
      */

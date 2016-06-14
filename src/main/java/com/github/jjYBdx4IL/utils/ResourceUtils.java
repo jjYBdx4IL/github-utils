@@ -99,6 +99,11 @@ public class ResourceUtils {
             File tempFile = File.createTempFile("extractedResource", ".tmp");
             try (OutputStream os = new FileOutputStream(tempFile)) {
                 IOUtils.copy(is, os);
+            } catch (IOException ex) {
+                if (!tempFile.delete()) {
+                    tempFile.deleteOnExit();
+                }
+                throw ex;
             }
             return tempFile;
         }

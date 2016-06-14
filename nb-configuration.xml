@@ -9,8 +9,12 @@ Without this configuration present, some functionality in the IDE may be limited
     <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
         <word>classpath</word>
         <word>fann</word>
+        <word>Java's</word>
         <word>jni</word>
+        <word>junit's</word>
         <word>libfann</word>
+        <word>libvirt</word>
         <word>Linux</word>
+        <word>vmmgmt</word>
     </spellchecker-wordlist>
 </project-shared-configuration>
