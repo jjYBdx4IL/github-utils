@@ -31,15 +31,19 @@ import org.slf4j.LoggerFactory;
  */
 public class Desktop {
 
-    private static final Logger log = LoggerFactory.getLogger(Desktop.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Desktop.class);
 
     public static boolean browse(URI uri) {
 
-        if (browseDESKTOP(uri)) return true;
+        if (browseDESKTOP(uri)) {
+            return true;
+        }
 
-        if (openSystemSpecific(uri.toString())) return true;
+        if (openSystemSpecific(uri.toString())) {
+            return true;
+        }
 
-        log.warn(String.format("failed to browse %s", uri));
+        LOG.warn(String.format("failed to browse %s", uri));
 
         return false;
     }
@@ -47,11 +51,15 @@ public class Desktop {
 
     public static boolean open(File file) {
 
-        if (openDESKTOP(file)) return true;
+        if (openDESKTOP(file)) {
+            return true;
+        }
 
-        if (openSystemSpecific(file.getPath())) return true;
+        if (openSystemSpecific(file.getPath())) {
+            return true;
+        }
 
-        log.warn(String.format("failed to open %s", file.getAbsolutePath()));
+        LOG.warn(String.format("failed to open %s", file.getAbsolutePath()));
 
         return false;
     }
@@ -59,11 +67,15 @@ public class Desktop {
 
     public static boolean edit(File file) {
 
-        if (editDESKTOP(file)) return true;
+        if (editDESKTOP(file)) {
+            return true;
+        }
 
-        if (openSystemSpecific(file.getPath())) return true;
+        if (openSystemSpecific(file.getPath())) {
+            return true;
+        }
 
-        log.warn(String.format("failed to edit %s", file.getAbsolutePath()));
+        LOG.warn(String.format("failed to edit %s", file.getAbsolutePath()));
 
         return false;
     }
@@ -73,24 +85,38 @@ public class Desktop {
 
         if (SystemUtils.IS_OS_LINUX) {
             if (isXDG()) {
-                if (runCommand("xdg-open", "%s", what)) return true;
+                if (runCommand("xdg-open", "%s", what)) {
+                    return true;
+                }
             }
             if (isKDE()) {
-                if (runCommand("kde-open", "%s", what)) return true;
+                if (runCommand("kde-open", "%s", what)) {
+                    return true;
+                }
             }
             if (isGNOME()) {
-                if (runCommand("gnome-open", "%s", what)) return true;
+                if (runCommand("gnome-open", "%s", what)) {
+                    return true;
+                }
             }
-            if (runCommand("kde-open", "%s", what)) return true;
-            if (runCommand("gnome-open", "%s", what)) return true;
+            if (runCommand("kde-open", "%s", what)) {
+                return true;
+            }
+            if (runCommand("gnome-open", "%s", what)) {
+                return true;
+            }
         }
 
         if (SystemUtils.IS_OS_MAC) {
-            if (runCommand("open", "%s", what)) return true;
+            if (runCommand("open", "%s", what)) {
+                return true;
+            }
         }
 
         if (SystemUtils.IS_OS_WINDOWS) {
-            if (runCommand("explorer", "%s", what)) return true;
+            if (runCommand("explorer", "%s", what)) {
+                return true;
+            }
         }
 
         return false;
@@ -101,21 +127,21 @@ public class Desktop {
 
         try {
             if (!java.awt.Desktop.isDesktopSupported()) {
-                log.debug("Platform is not supported.");
+                LOG.debug("Platform is not supported.");
                 return false;
             }
 
             if (!java.awt.Desktop.getDesktop().isSupported(java.awt.Desktop.Action.BROWSE)) {
-                log.debug("BROWSE is not supported.");
+                LOG.debug("BROWSE is not supported.");
                 return false;
             }
 
-            log.info("Trying to use Desktop.getDesktop().browse() with " + uri.toString());
+            LOG.info("Trying to use Desktop.getDesktop().browse() with " + uri.toString());
             java.awt.Desktop.getDesktop().browse(uri);
 
             return true;
         } catch (Throwable t) {
-            log.error("Error using desktop browse.", t);
+            LOG.error("Error using desktop browse.", t);
             return false;
         }
     }
@@ -124,21 +150,21 @@ public class Desktop {
     private static boolean openDESKTOP(File file) {
         try {
             if (!java.awt.Desktop.isDesktopSupported()) {
-                log.debug("Platform is not supported.");
+                LOG.debug("Platform is not supported.");
                 return false;
             }
 
             if (!java.awt.Desktop.getDesktop().isSupported(java.awt.Desktop.Action.OPEN)) {
-                log.debug("OPEN is not supported.");
+                LOG.debug("OPEN is not supported.");
                 return false;
             }
 
-            log.info("Trying to use Desktop.getDesktop().open() with " + file.toString());
+            LOG.info("Trying to use Desktop.getDesktop().open() with " + file.toString());
             java.awt.Desktop.getDesktop().open(file);
 
             return true;
         } catch (Throwable t) {
-            log.error("Error using desktop open.", t);
+            LOG.error("Error using desktop open.", t);
             return false;
         }
     }
@@ -147,21 +173,21 @@ public class Desktop {
     private static boolean editDESKTOP(File file) {
         try {
             if (!java.awt.Desktop.isDesktopSupported()) {
-                log.debug("Platform is not supported.");
+                LOG.debug("Platform is not supported.");
                 return false;
             }
 
             if (!java.awt.Desktop.getDesktop().isSupported(java.awt.Desktop.Action.EDIT)) {
-                log.debug("EDIT is not supported.");
+                LOG.debug("EDIT is not supported.");
                 return false;
             }
 
-            log.info("Trying to use Desktop.getDesktop().edit() with " + file);
+            LOG.info("Trying to use Desktop.getDesktop().edit() with " + file);
             java.awt.Desktop.getDesktop().edit(file);
 
             return true;
         } catch (Throwable t) {
-            log.error("Error using desktop edit.", t);
+            LOG.error("Error using desktop edit.", t);
             return false;
         }
     }
@@ -169,37 +195,40 @@ public class Desktop {
 
     private static boolean runCommand(String command, String args, String file) {
 
-        log.info("Trying to exec:\n   cmd = " + command + "\n   args = " + args + "\n   %s = " + file);
+        LOG.info("Trying to exec:\n   cmd = " + command + "\n   args = " + args + "\n   %s = " + file);
 
         String[] parts = prepareCommand(command, args, file);
 
         try {
             Process p = Runtime.getRuntime().exec(parts);
-            if (p == null) return false;
+            if (p == null) {
+                return false;
+            }
 
             try {
                 int retval = p.exitValue();
                 if (retval == 0) {
-                    log.error("Process ended immediately.");
+                    LOG.error("Process ended immediately.");
                     return false;
                 } else {
-                    log.error("Process crashed.");
+                    LOG.error("Process crashed.");
                     return false;
                 }
             } catch (IllegalThreadStateException itse) {
-                log.error("Process is running.");
+                LOG.error("Process is running.");
                 return true;
             }
         } catch (IOException e) {
-            log.error("Error running command.", e);
+            LOG.error("Error running command.", e);
             return false;
         }
     }
 
 
+    @SuppressWarnings("AssignmentToForLoopParameter")
     private static String[] prepareCommand(String command, String args, String file) {
 
-        List<String> parts = new ArrayList<String>();
+        List<String> parts = new ArrayList<>();
         parts.add(command);
 
         if (args != null) {
@@ -226,5 +255,8 @@ public class Desktop {
     private static boolean isKDE() {
         String gdmSession = System.getenv("GDMSESSION");
         return gdmSession != null && gdmSession.toLowerCase().contains("kde");
+    }
+
+    private Desktop() {
     }
 }

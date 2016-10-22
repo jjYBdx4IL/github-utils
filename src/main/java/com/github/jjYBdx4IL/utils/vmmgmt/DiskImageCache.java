@@ -36,20 +36,54 @@ import org.slf4j.LoggerFactory;
  */
 public class DiskImageCache {
 
-    private static final Logger log = LoggerFactory.getLogger(DiskImageCache.class);
-    private static final File cacheDir = new File(System.getProperty("user.home"),
+    private static final Logger LOG = LoggerFactory.getLogger(DiskImageCache.class);
+    private static final File CACHE_DIR = new File(System.getProperty("user.home"),
             ".cache" + File.separator + DiskImageCache.class.getName());
     public static final String DOT_XML = ".xml";
     public static final String DOT_TMP = ".tmp";
     public static final String DISKIMAGE_NAME_REGEX = "^[a-z][a-z0-9-]*$";
     public static final Pattern DISKIMAGE_NAME_PATTERN = Pattern.compile(DISKIMAGE_NAME_REGEX, Pattern.CASE_INSENSITIVE);
 
-    public static DiskImage get(String name) {
+    private static void checkImageName(String name) {
         if (!DISKIMAGE_NAME_PATTERN.matcher(name).find()) {
             throw new IllegalArgumentException("bad disk image name");
         }
-        File xmlFile = new File(cacheDir, name + DOT_XML);
+    }
+
+    public static void deleteIfExists(String name) {
+        checkImageName(name);
+
+        LOG.debug("deleting image " + name);
+
+        DiskImage image = get(name);
+        if (image == null) {
+            return;
+        }
+
+        File xmlFile = new File(CACHE_DIR, name + DOT_XML);
+        File imageFile = image.getImage();
+        LOG.debug("deleting file " + imageFile.getPath());
+        imageFile.delete();
+        File backingFile = image.getBackingDiskImage();
+        if (backingFile != null) {
+            LOG.debug("deleting file " + backingFile.getPath());
+            backingFile.delete();
+        }
+        LOG.debug("deleting file " + xmlFile.getPath());
+        xmlFile.delete();
+    }
+
+    /**
+     *
+     * @param name the image name
+     * @return null if image does not exist
+     */
+    public static DiskImage get(String name) {
+        checkImageName(name);
+
+        File xmlFile = new File(CACHE_DIR, name + DOT_XML);
         if (!xmlFile.exists()) {
+            LOG.debug("image " + name + " not found");
             return null;
         }
         XStream xstream = new XStream(new StaxDriver());
@@ -57,22 +91,23 @@ public class DiskImageCache {
         try {
             diskImage = (DiskImage) xstream.fromXML(xmlFile);
         } catch (StreamException ex) {
-            log.error("", ex);
+            LOG.error("", ex);
         }
+        LOG.debug("image " + name + " found: " + diskImage);
         return diskImage;
     }
 
     public static DiskImage put(String name, DiskImage diskImage) throws IOException {
-        if (!DISKIMAGE_NAME_PATTERN.matcher(name).find()) {
-            throw new IllegalArgumentException("bad disk image name");
-        }
+        checkImageName(name);
+
+        LOG.debug("storing image " + name + ": " + diskImage);
 
         if (diskImage.getBackingDiskImage() != null) {
             throw new IllegalArgumentException("images with backing files not supported");
         }
 
         DiskImage newDiskImage = new DiskImage(
-                new File(cacheDir, name),
+                new File(CACHE_DIR, name),
                 diskImage.getFormat(),
                 diskImage.getSizeGB(),
                 diskImage.getBackingDiskImage());
@@ -87,7 +122,7 @@ public class DiskImageCache {
             Files.move(diskImage.getImage().toPath(), newDiskImage.getImage().toPath(), REPLACE_EXISTING);
         }
 
-        File xmlFile = new File(cacheDir, name + DOT_XML);
+        File xmlFile = new File(CACHE_DIR, name + DOT_XML);
         XStream xstream = new XStream(new StaxDriver());
         try {
             try (OutputStream os = new FileOutputStream(xmlFile)) {
@@ -104,5 +139,8 @@ public class DiskImageCache {
         }
 
         return newDiskImage;
+    }
+
+    private DiskImageCache() {
     }
 }

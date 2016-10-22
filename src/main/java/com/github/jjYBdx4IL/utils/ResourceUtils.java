@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -49,6 +50,16 @@ public class ResourceUtils {
      * @throws RuntimeException checked exception are wrapped in RuntimeException
      */
     public static synchronized void loadLibrary(String libName) {
+        loadLibrary(libName, false);
+    }
+
+    /**
+     * @see #loadLibrary(String)
+     * @param libName the native library to load, ie. "fann" for "libfann.so" on Linux systems
+     * @param deleteOnExit if true, delete unpacked library on VM exit, not before
+     * @throws RuntimeException checked exception are wrapped in RuntimeException
+     */
+    public static synchronized void loadLibrary(String libName, boolean deleteOnExit) {
         if (libRegistry.contains(libName)) {
             log.debug("library " + libName + " already loaded, silently ignoring load request");
             return;
@@ -56,22 +67,24 @@ public class ResourceUtils {
 
         String mappedLibName = System.mapLibraryName(libName);
         String resourceId = "/" + Platform.RESOURCE_PREFIX + "/" + mappedLibName;
-        log.debug("trying to find " + resourceId);
+        log.debug("searching for " + resourceId);
         File extractedLib = null;
         try {
             extractedLib = extractResource(resourceId);
             log.debug("extracted resource to " + extractedLib.getPath());
             System.load(extractedLib.getPath());
             libRegistry.add(libName);
+            log.debug(libName + " library loaded");
         } catch (IOException ex) {
-            log.debug("loading failed", ex);
+            log.debug("failed to load library" + libName, ex);
             throw new RuntimeException(ex);
         } finally {
             if (extractedLib != null && extractedLib.exists()) {
-                log.debug("deleting " + extractedLib.getPath());
                 if (!extractedLib.delete()) {
                     log.debug("failed to delete " + extractedLib.getPath() + ", scheduling deletion for VM shutdown");
                     extractedLib.deleteOnExit();
+                } else {
+                    log.debug("deleted " + extractedLib.getPath());
                 }
             }
         }
@@ -106,6 +119,36 @@ public class ResourceUtils {
                 throw ex;
             }
             return tempFile;
+        }
+    }
+
+    /**
+     * Get a {@link java.io.File} to a resource. Because you don't give this method a class, only
+     * absolute resource IDs are usually sensible choices. This function only works for
+     * extracted resources, not for resource packed inside jars. The function will throw only unchecked
+     * exceptions and is mainly useful for static initializers and test units.
+     * 
+     * @param resourceId the resource path, preferably an absolute one
+     * @return the resource
+     */
+    public static File getResFileUnchecked(String resourceId) {
+        return getResFileUnchecked(ResourceUtils.class, resourceId);
+    }
+
+    /**
+     * Get a {@link java.io.File} to a resource. The resourceId argument can be relative, it will be resolved
+     * relative to the resourceClass argument. This function only works for
+     * extracted resources, not for resource packed inside jars. The function will throw only unchecked
+     * exceptions and is mainly useful for static initializers and test units.
+     *
+     * @param resourceId the resource path, sensibly a relative one
+     * @return the resource
+     */
+    public static File getResFileUnchecked(Class resourceClass, String resourceId) {
+        try {
+            return new File(resourceClass.getResource(resourceId).toURI());
+        } catch (URISyntaxException ex) {
+            throw new RuntimeException(ex);
         }
     }
 

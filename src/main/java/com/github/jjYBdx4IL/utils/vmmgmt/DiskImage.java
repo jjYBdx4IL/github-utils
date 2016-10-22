@@ -112,4 +112,20 @@ public class DiskImage {
                     exitCode, StringUtils.join(" ", cmdParts)));
         }
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("DiskImage [");
+        builder.append("backingDiskImage=");
+        builder.append(backingDiskImage);
+        builder.append(", format=");
+        builder.append(format);
+        builder.append(", image=");
+        builder.append(image);
+        builder.append(", sizeGB=");
+        builder.append(sizeGB);
+        builder.append("]");
+        return builder.toString();
+    }
 }
