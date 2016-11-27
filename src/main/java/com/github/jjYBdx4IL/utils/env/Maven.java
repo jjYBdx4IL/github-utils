@@ -15,13 +15,21 @@
  */
 package com.github.jjYBdx4IL.utils.env;
 
+import java.io.File;
+
 /**
  *
  * @author jjYBdx4IL
  */
 public class Maven extends JavaProcess {
 
+    public static final String REL_TGT_DIR = "target";
+
     public static String getMavenBasedir() {
         return System.getProperty("basedir");
+    }
+
+    public static File getMavenTargetDir() {
+        return new File(getMavenBasedir(), REL_TGT_DIR);
     }
 }

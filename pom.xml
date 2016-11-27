@@ -118,6 +118,11 @@
         <!-- our own modules first -->
         <dependency>
             <groupId>com.github.jjYBdx4IL</groupId>
+            <artifactId>diskcache</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.jjYBdx4IL</groupId>
             <artifactId>github-test-utils</artifactId>
             <version>1.0</version>
             <scope>test</scope>

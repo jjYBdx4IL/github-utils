@@ -15,6 +15,11 @@
  */
 package com.github.jjYBdx4IL.utils.env;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author jjYBdx4IL
@@ -74,5 +79,33 @@ public class Surefire extends Maven {
         return isEclipseDirectSingleJUnit()
                 || Maven.getMavenBasedir() != null && System.getProperty("test", "").contains("#");
     }
-    
+
+    public static File getMavenTargetDir() {
+        return new File(getMavenBasedir(), REL_TGT_DIR);
+    }
+
+    public static File getTempDirForClass(Class<?> clazz) throws IOException {
+        File dir = new File(getMavenTargetDir(), clazz.getCanonicalName());
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        if (!dir.exists()) {
+            throw new IOException("failed to create directory: " + dir.getAbsolutePath());
+        }
+        return dir;
+    }
+
+    /**
+     * Same as {@link #getTempDirForClass(Class)} but wraps the IOException inside a RuntimeException.
+     * 
+     * @param clazz
+     * @return
+     */
+    public static File getTempDirForClassRT(Class<?> clazz) {
+        try {
+            return getTempDirForClass(clazz);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 }

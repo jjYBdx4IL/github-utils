@@ -13,6 +13,11 @@
         <appender-ref ref="stdout" />
     </logger>
 
+    <logger name="com.github.jjYBdx4IL.diskcache" additivity="false">
+        <level value="debug"></level>
+        <appender-ref ref="stdout" />
+    </logger>
+
 	<root>
 		<priority value="info" />
 		<appender-ref ref="stdout" />
