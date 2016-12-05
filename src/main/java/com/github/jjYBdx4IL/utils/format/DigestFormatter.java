@@ -26,7 +26,7 @@ public class DigestFormatter {
      * as a byte[], for example by java.security.MessageDigest.
      *
      * @param digest
-     * @return
+     * @return the string representation of the digest
      */
     public static String md5(byte[] digest) {
         if (digest == null || digest.length != 16) {

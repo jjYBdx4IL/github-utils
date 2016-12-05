@@ -91,7 +91,7 @@ public class FloatArrayHistory {
      *
      * @param start inclusive
      * @param end exclusive
-     * @return
+     * @return the string
      */
     public String toString(int start, int end) {
         return toString(start, end, Locale.getDefault());
@@ -113,7 +113,7 @@ public class FloatArrayHistory {
      * Uses default locale.
      *
      * @param start
-     * @return
+     * @return the string
      */
     public String toString(int start) {
         return toString(start, h.length, Locale.getDefault());

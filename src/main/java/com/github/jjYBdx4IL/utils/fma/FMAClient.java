@@ -18,10 +18,19 @@ package com.github.jjYBdx4IL.utils.fma;
 import com.github.jjYBdx4IL.diskcache.DiskCache;
 import com.google.gson.Gson;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +44,9 @@ public class FMAClient {
     private static final Logger LOG = LoggerFactory.getLogger(FMAClient.class);
     private static final DiskCache cache = new DiskCache(FMAClient.class.getName());
     private static final int RESULTS_PER_PAGE = 1000;
+    private final FMAConfig config;
+    private final HttpClient httpclient;
+    private static final Pattern DL_URL_PAT = Pattern.compile("href=\"(https://freemusicarchive.org/music/download/[0-9a-f]+)\"");
 
     public static FMASearchResult search(String query, boolean commercialUseAllowedOnly) throws IOException {
         URIBuilder b = new URIBuilder();
@@ -78,8 +90,54 @@ public class FMAClient {
 
         return result;
     }
-    
-    private FMAClient() {
+
+    public static String parseDownloadUrl(String trackUrl) throws IOException {
+        byte[] data = cache.retrieve(trackUrl, 3600*1000L);
+        LOG.debug("track url: " + trackUrl);
+        String page = new String(data, "UTF-8");
+        LOG.debug("track url page content: " + page);
+        Matcher m = DL_URL_PAT.matcher(page);
+        String url = null;
+        if (m.find()) {
+            url = m.group(1);
+        }
+        LOG.debug("download url: " + url);
+        return url;
+    }
+
+    public FMATrack getTrack(int trackId) throws IOException {
+        if (!config.isInitialized()) {
+            throw new RuntimeException("no api_key configured");
+        }
+
+        URIBuilder b = new URIBuilder();
+        b.setScheme("https");
+        b.setHost("freemusicarchive.org");
+        b.setPath("/api/get/tracks.json");
+        b.addParameter("api_key", config.fmaApiKey);
+        b.addParameter("track_id", Integer.toString(trackId));
+
+        LOG.debug("retrieving " + b.toString());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        HttpGet httpGet = new HttpGet(b.toString());
+        HttpResponse response = httpclient.execute(httpGet);
+        if (response.getStatusLine().getStatusCode() != 200) {
+            throw new IOException("url returned status code " + response.getStatusLine().getStatusCode() + ": " + b.toString());
+        }
+        try (InputStream is = response.getEntity().getContent()) {
+            IOUtils.copy(is, baos);
+        }
+
+        byte[] data = baos.toByteArray();
+        Gson gson = new Gson();
+        FMATrackResult _result = gson.fromJson(new String(data), FMATrackResult.class);
+        return _result.dataset.get(0);
+    }
+
+    public FMAClient() throws IOException {
+        config = (FMAConfig) FMAConfig.readConfig("config.xml", FMAConfig.class);
+        httpclient = HttpClients.createDefault();
     }
 
 }

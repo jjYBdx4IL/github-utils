@@ -42,7 +42,7 @@ public class ResourceUtils {
 
     /**
      * Loads native libraries from the classpath. Extracts from jar files if necessary. Follows the path
-     * naming convention of JNA, {@link com.sun.jna#Platform.RESOURCE_PREFIX}. Strictly loads libraries from
+     * naming convention of JNA, {@link com.sun.jna.Platform#RESOURCE_PREFIX}. Strictly loads libraries from
      * the classpath. Ignores jni.library.path setting. This function will detect repeated loads of the same
      * library and silently skip any further loads using the same libName argument.
      *
@@ -95,7 +95,7 @@ public class ResourceUtils {
      * Beware: it's your duty to clean up this file, though it's created inside your system's temp folder.
      *
      * @param resourceId an absolute resourceId (ie. starts with "/")
-     * @return
+     * @return the extracted file
      * @throws java.io.IOException
      */
     public static File extractResource(String resourceId) throws IOException {

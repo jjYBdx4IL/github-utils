@@ -54,5 +54,20 @@ public class FMAClientTest {
         LOG.info(result.aTracks.get(0).toString());
         LOG.info("results returned: " + result.aTracks.size());
     }
-    
+
+    @Test
+    public void testGetDownloadUrl() throws IOException {
+        FMAClient client = new FMAClient();
+        FMATrack track = client.getTrack(25148);
+        String dlUrl = FMAClient.parseDownloadUrl(track.track_url);
+        assertNotNull(dlUrl);
+        LOG.info("dlUrl: " + dlUrl);
+    }
+
+    @Test
+    public void getTrack() throws IOException {
+        FMATrack track = new FMAClient().getTrack(25148);
+        assertEquals(25148, track.track_id);
+        LOG.info(track.toString());
+    }
 }

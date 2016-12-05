@@ -133,7 +133,7 @@ public class VMControl {
 
     /**
      * Never returns null. Throws RuntimeException on timeout.
-     * @return
+     * @return the ssh resources
      */
     public SSHResources waitForSSHSession() {
         long timeout = System.currentTimeMillis() + vmOperationTimeoutSecs * 1000L;

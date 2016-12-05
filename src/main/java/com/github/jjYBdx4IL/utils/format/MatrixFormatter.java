@@ -27,7 +27,7 @@ public class MatrixFormatter {
      * @param title optional, default (null) is none
      * @param matrix matrix[row][column]
      * @param lineSeparator optional, default (null) is system dependent
-     * @return
+     * @return the string representation of the digest
      */
     public static String format(String title, int[][] matrix, String lineSeparator) {
         if (matrix == null || matrix.length == 0) {

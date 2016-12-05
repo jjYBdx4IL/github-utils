@@ -15,21 +15,24 @@
  */
 package com.github.jjYBdx4IL.utils.fma;
 
-import java.util.Objects;
-
 /**
  *
  * @author jjYBdx4IL
  */
-class FMATrack {
+public class FMATrack {
 
-    public Long track_id;
+    public long track_id;
     public Long album_id;
     public String album_title;
     public String album_url;
     public Long artist_id;
     public String artist_name;
     public String artist_url;
+    /**
+     * beware! the track file url changes regularly and becomes invalid after some point. Use
+     * track_url in combination with {@link FMAClient#parseDownloadUrl(java.lang.String)} to get
+     * an up-to-date download link.
+     */
     public String track_file_url;
     public String track_title;
     public String track_url;
@@ -47,7 +50,7 @@ class FMATrack {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.track_id);
+        hash = 41 * hash + (int) (this.track_id ^ (this.track_id >>> 32));
         return hash;
     }
 
@@ -63,7 +66,7 @@ class FMATrack {
             return false;
         }
         final FMATrack other = (FMATrack) obj;
-        if (!Objects.equals(this.track_id, other.track_id)) {
+        if (this.track_id != other.track_id) {
             return false;
         }
         return true;

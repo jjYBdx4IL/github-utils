@@ -39,7 +39,7 @@ public class Surefire extends Maven {
     /**
      * JUnit test being run inside Eclipse without calling maven?
      * 
-     * @return
+     * @return true iff being run as direct junit test in Eclipse without maven
      */
     public static boolean isEclipseDirectJUnit() {
         if (Maven.getMavenBasedir() == null && System.getProperty("sun.java.command").startsWith("org.eclipse.jdt.internal.junit.runner.RemoteTestRunner ")) {
@@ -51,7 +51,7 @@ public class Surefire extends Maven {
     /**
      * <b>Single</b> JUnit test being run inside Eclipse without calling maven?
      * 
-     * @return
+     * @return iff being run as <b>Single</b> JUnit test inside Eclipse without maven
      */
     public static boolean isEclipseDirectSingleJUnit() {
         if (System.getProperty("basedir") == null
@@ -73,7 +73,7 @@ public class Surefire extends Maven {
      * Some junit tests might require user interaction. You may use
      * this function together with a junit assumption to prevent running those tests in junit batch runs.
      * 
-     * @return
+     * @return true iff being run as a single test (method, not a test unit!)
      */
     public static boolean isSingleTextExecution() {
         return isEclipseDirectSingleJUnit()
@@ -99,7 +99,7 @@ public class Surefire extends Maven {
      * Same as {@link #getTempDirForClass(Class)} but wraps the IOException inside a RuntimeException.
      * 
      * @param clazz
-     * @return
+     * @return the temporary directory
      */
     public static File getTempDirForClassRT(Class<?> clazz) {
         try {

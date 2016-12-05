@@ -32,7 +32,7 @@ public class LibvirtUtils {
      * catching the error. If you are using this with junit's assume functions, put it into
      * a static function annotated with {@link org.junit.BeforeClass}.
      *
-     * @return
+     * @return true iff libvirt is available on the current system
      */
     public static boolean isAvailable() {
         try {

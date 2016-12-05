@@ -83,7 +83,7 @@ public class VMInstanceProvider implements AutoCloseable {
      * first.
      *
      * @param os
-     * @return
+     * @return the vm data
      */
     public VMData createVM(OS os) throws VMMgmtException {
         return createVM(os, "default");
@@ -96,7 +96,7 @@ public class VMInstanceProvider implements AutoCloseable {
      * @param os
      * @param vmName identifies the VM instance. There cannot be two VMs running with the same name in the
      * same domain at one time.
-     * @return
+     * @return the vm data
      */
     public VMData createVM(OS os, String vmName) throws VMMgmtException {
         try {
