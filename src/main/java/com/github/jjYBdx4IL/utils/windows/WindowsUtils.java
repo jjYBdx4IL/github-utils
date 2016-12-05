@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jjYBdx4IL.utils;
+package com.github.jjYBdx4IL.utils.windows;
 
+import com.github.jjYBdx4IL.utils.ProcRunner;
 import java.io.IOException;
 
 /**

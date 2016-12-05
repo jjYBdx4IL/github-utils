@@ -15,7 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils.env;
 
-import com.github.jjYBdx4IL.utils.WindowsUtils;
+import com.github.jjYBdx4IL.utils.windows.WindowsUtils;
 
 import java.io.File;
 import java.io.PrintStream;
