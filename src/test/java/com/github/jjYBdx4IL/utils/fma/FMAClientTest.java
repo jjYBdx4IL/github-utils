@@ -67,7 +67,7 @@ public class FMAClientTest {
     @Test
     public void getTrack() throws IOException {
         FMATrack track = new FMAClient().getTrack(25148);
-        assertEquals(25148, track.track_id);
+        assertEquals(25148, track.track_id.longValue());
         LOG.info(track.toString());
     }
 }
