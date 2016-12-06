@@ -27,7 +27,17 @@ public class CI extends Env {
     private final static String JENKINS_URL = "JENKINS_URL";
 
     public static boolean isCI() {
-        return isJenkins() || isHudson();
+        return isJenkins() || isHudson() || isTravis() || isPublic()
+                || Boolean.parseBoolean(System.getenv("CI"))
+                || Boolean.parseBoolean(System.getenv("CONTINUOUS_INTEGRATION"));
+    }
+
+    public static boolean isPublic() {
+        return System.getenv("PUBLIC_CI") != null;
+    }
+
+    public static boolean isTravis() {
+        return Boolean.parseBoolean(System.getenv("TRAVIS"));
     }
 
     public static boolean isJenkins() {

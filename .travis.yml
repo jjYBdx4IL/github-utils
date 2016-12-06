@@ -2,3 +2,6 @@ language: java
 before_install:
   - git clone https://github.com/jjYBdx4IL/diskcache
   - mvn install -f diskcache -DskipTests
+env:
+  - PUBLIC_CI=true
+
