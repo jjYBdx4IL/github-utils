@@ -42,7 +42,7 @@ public class VMInstanceProviderTest {
     @BeforeClass
     public static void beforeClass() {
         // require libvirt; require CI to have libvirt installed
-        Assume.assumeTrue(LibvirtUtils.isAvailable() || CI.isCI());
+        Assume.assumeTrue(LibvirtUtils.isAvailable() || CI.isCI() && !CI.isPublic());
     }
     
     private static void sshLoginTest(VMData vm) throws ConnectionException, TransportException {

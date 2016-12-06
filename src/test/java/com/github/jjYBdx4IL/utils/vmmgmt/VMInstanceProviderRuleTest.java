@@ -15,6 +15,8 @@
  */
 package com.github.jjYBdx4IL.utils.vmmgmt;
 
+import com.github.jjYBdx4IL.utils.env.CI;
+
 import java.util.concurrent.TimeUnit;
 
 import net.schmizz.sshj.connection.channel.direct.Session;
@@ -33,7 +35,7 @@ public class VMInstanceProviderRuleTest {
 
     @BeforeClass
     public static void beforeClass() {
-        Assume.assumeTrue(LibvirtUtils.isAvailable());
+        Assume.assumeTrue(LibvirtUtils.isAvailable() && !CI.isPublic());
     }
 
     @Rule
