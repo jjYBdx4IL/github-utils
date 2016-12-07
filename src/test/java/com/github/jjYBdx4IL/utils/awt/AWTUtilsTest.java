@@ -46,4 +46,12 @@ public class AWTUtilsTest {
         AWTUtils.showInfoDialogOnMouseScreen("title", "<html>line 1<br />line 2<br /><i><u>test</u></i><br /><pre>1234567890<br>       8</pre></html>");
     }
 
+    @Test
+    public void testShowPopupNotification() throws InterruptedException {
+        Assume.assumeTrue(Surefire.isSingleTextExecution());
+
+        AWTUtils.showPopupNotification(-1, "some test message", AWTUtils.POS_RIGHT|AWTUtils.POS_BOTTOM, 5000, false);
+        Thread.sleep(7000L);
+    }
+
 }

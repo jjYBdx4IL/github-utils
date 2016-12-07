@@ -15,21 +15,117 @@
  */
 package com.github.jjYBdx4IL.utils.awt;
 
+import java.awt.Dialog;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.MouseInfo;
 import java.awt.Rectangle;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import javax.swing.AbstractAction;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 /**
  *
  * @author Github jjYBdx4IL Projects
  */
 public class AWTUtils {
+
+    public static final int POS_LEFT = 1, POS_CENTER_X = 2, POS_RIGHT = 4;
+    public static final int POS_TOP = 8, POS_CENTER_Y = 16, POS_BOTTOM = 32;
+
+    private static final int SCREEN_EDGE_DISTANCE = 20;
+
+    /**
+     *
+     * @param screen -1 for all screens
+     * @param title
+     * @param message
+     * @param position
+     * @param timeoutMS
+     * @param closeableByUser
+     */
+    public static void showPopupNotification(final int screen, final String message,
+            final int position, final int timeoutMS, final boolean closeableByUser) {
+        if (screen == -1) {
+            final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            final GraphicsDevice[] gd = ge.getScreenDevices();
+            for (int i = 0; i < gd.length; i++) {
+                showPopupNotification(i, message, position, timeoutMS, closeableByUser);
+            }
+            return;
+        }
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final JOptionPane optionPane = new JOptionPane(message, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+
+                final JDialog dialog = new JDialog();
+                dialog.setModal(false);
+                dialog.setModalityType(Dialog.ModalityType.MODELESS);
+                dialog.setContentPane(optionPane);
+                if (!closeableByUser) {
+                    dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+                }
+                dialog.setAlwaysOnTop(true);
+                dialog.setFocusableWindowState(false);
+                dialog.setAutoRequestFocus(false);
+                dialog.setFocusable(false);
+                dialog.setUndecorated(true);
+                dialog.setEnabled(false);
+                dialog.setType(Window.Type.POPUP);
+                dialog.pack();
+
+                AWTUtils.setPosition(dialog, screen, position);
+
+                if (timeoutMS > 0) {
+                    Timer timer = new Timer(timeoutMS, new AbstractAction() {
+                        @Override
+                        public void actionPerformed(ActionEvent ae) {
+                            dialog.dispose();
+                        }
+                    });
+                    timer.setRepeats(false);
+                    timer.start();
+                }
+
+                dialog.setVisible(true);
+            }
+        }, "Wait4Dialog");
+        t.start();
+    }
+
+    public static void setPosition(Window window, int screen, int pos) {
+        final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        final GraphicsDevice[] gd = ge.getScreenDevices();
+        if (screen < 0 || screen >= gd.length) {
+            throw new IllegalArgumentException("invalid screen");
+        }
+        final Rectangle bounds = gd[screen].getDefaultConfiguration().getBounds();
+        double x;
+        if ((pos & POS_LEFT) == POS_LEFT) {
+            x = bounds.getX() + SCREEN_EDGE_DISTANCE;
+        } else if ((pos & POS_CENTER_X) == POS_CENTER_X) {
+            x = bounds.getX() + (bounds.getWidth() - window.getWidth()) / 2f;
+        } else {
+            x = bounds.getMaxX() - window.getWidth() - SCREEN_EDGE_DISTANCE;
+        }
+        double y;
+        if ((pos & POS_TOP) == POS_TOP) {
+            y = bounds.getY() + SCREEN_EDGE_DISTANCE;
+        } else if ((pos & POS_CENTER_Y) == POS_CENTER_Y) {
+            y = bounds.getY() + (bounds.getHeight() - window.getHeight()) / 2f;
+        } else {
+            y = bounds.getMaxY() - window.getHeight() - SCREEN_EDGE_DISTANCE;
+        }
+        window.setLocation((int) x, (int) y);
+
+    }
 
     /**
      * Set JFrame location relative to a specific screen in a multi-screen setup.
@@ -79,7 +175,7 @@ public class AWTUtils {
     }
 
     /**
-     * 
+     *
      * @param title
      * @param question
      * @return true iff user pressed the yes button
@@ -106,7 +202,7 @@ public class AWTUtils {
 
     /**
      * Display some informational message.
-     * 
+     *
      * @param title
      * @param text
      */
@@ -120,8 +216,7 @@ public class AWTUtils {
     /**
      * Determine screen index for the screen the mouse pointer is currently located on.
      *
-     * @return the index for the array returned by
-     * GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()
+     * @return the index for the array returned by GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()
      * @throws RuntimeException if no screen could be found
      */
     public static int getMousePointerScreenDeviceIndex() {
