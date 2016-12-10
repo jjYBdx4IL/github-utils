@@ -15,7 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils.fma;
 
-import com.github.jjYBdx4IL.diskcache.DiskCache;
+import com.github.jjYBdx4IL.diskcache.WebDiskCache;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
@@ -42,10 +42,8 @@ import org.slf4j.LoggerFactory;
 public class FMAClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(FMAClient.class);
-    private static final DiskCache cache = new DiskCache(FMAClient.class.getName());
+    private static final WebDiskCache cache = new WebDiskCache(FMAClient.class.getName());
     private static final int RESULTS_PER_PAGE = 1000;
-    private final FMAConfig config;
-    private final HttpClient httpclient;
     private static final Pattern DL_URL_PAT = Pattern.compile("href=\"(https://freemusicarchive.org/music/download/[0-9a-f]+)\"");
 
     public static FMASearchResult search(String query, boolean commercialUseAllowedOnly) throws IOException {
@@ -105,6 +103,13 @@ public class FMAClient {
         return url;
     }
 
+    private final FMAConfig config;
+    private final HttpClient httpclient;
+
+    public FMAClient() throws IOException {
+        config = (FMAConfig) FMAConfig.readConfig("config.xml", FMAConfig.class);
+        httpclient = HttpClients.createDefault();
+    }
     public FMATrack getTrack(int trackId) throws IOException {
         if (!config.isInitialized()) {
             throw new RuntimeException("no api_key configured");
@@ -133,11 +138,6 @@ public class FMAClient {
         Gson gson = new Gson();
         FMATrackResult _result = gson.fromJson(new String(data), FMATrackResult.class);
         return _result.dataset.get(0);
-    }
-
-    public FMAClient() throws IOException {
-        config = (FMAConfig) FMAConfig.readConfig("config.xml", FMAConfig.class);
-        httpclient = HttpClients.createDefault();
     }
 
 }
