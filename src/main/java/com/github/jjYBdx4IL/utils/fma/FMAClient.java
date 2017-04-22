@@ -110,6 +110,11 @@ public class FMAClient {
         config = (FMAConfig) FMAConfig.readConfig("config.xml", FMAConfig.class);
         httpclient = HttpClients.createDefault();
     }
+    
+    public boolean isConfigInitialized() {
+        return config.isInitialized();
+    }
+    
     public FMATrack getTrack(int trackId) throws IOException {
         if (!config.isInitialized()) {
             throw new RuntimeException("no api_key configured");

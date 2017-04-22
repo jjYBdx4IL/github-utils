@@ -15,7 +15,6 @@
  */
 package com.github.jjYBdx4IL.utils.fma;
 
-import com.github.jjYBdx4IL.utils.env.CI;
 import com.github.jjYBdx4IL.utils.env.Surefire;
 
 import java.io.IOException;
@@ -58,10 +57,7 @@ public class FMAClientTest {
 
     @Test
     public void testGetDownloadUrl() throws IOException {
-        Assume.assumeFalse(CI.isPublic());
-        
-        FMAClient client = new FMAClient();
-        FMATrack track = client.getTrack(25148);
+        FMATrack track = getConfiguredFMAClient().getTrack(25148);
         String dlUrl = FMAClient.parseDownloadUrl(track.track_url);
         assertNotNull(dlUrl);
         LOG.info("dlUrl: " + dlUrl);
@@ -69,10 +65,17 @@ public class FMAClientTest {
 
     @Test
     public void testGetTrack() throws IOException {
-        Assume.assumeFalse(CI.isPublic());
-
-        FMATrack track = new FMAClient().getTrack(25148);
+        FMATrack track = getConfiguredFMAClient().getTrack(25148);
         assertEquals(25148, track.track_id);
         LOG.info(track.toString());
+    }
+    
+    private FMAClient getConfiguredFMAClient() throws IOException {
+        FMAClient client = new FMAClient();
+        if (!client.isConfigInitialized()) {
+            LOG.warn("FMA client not configured, skipping test unit");
+            Assume.assumeTrue("FMA client not configured", false);
+        }
+        return client;
     }
 }
