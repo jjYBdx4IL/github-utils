@@ -25,7 +25,6 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
-import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 import org.junit.Assume;
 import org.junit.Test;
