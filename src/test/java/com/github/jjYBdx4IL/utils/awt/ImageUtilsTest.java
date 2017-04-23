@@ -15,17 +15,245 @@
  */
 package com.github.jjYBdx4IL.utils.awt;
 
+import com.github.jjYBdx4IL.test.ClassReloader;
+import com.github.jjYBdx4IL.test.GraphicsResource;
+import com.github.jjYBdx4IL.test.ImageTesterTest;
+import com.github.jjYBdx4IL.test.InteractiveTestBase;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+
+import javax.imageio.ImageIO;
+
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
  *
- * @author work
+ * @author jjYBdx4IL
  */
-public class ImageUtilsTest {
+
+public class ImageUtilsTest extends InteractiveTestBase implements Runnable {
+
+    private final static Logger log = Logger.getLogger(ImageUtilsTest.class.getName());
+
+    private static BufferedImage createImg1() {
+        BufferedImage img = new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = (Graphics2D) img.getGraphics();
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, 3, 3);
+        g.setColor(Color.RED);
+        g.fillRect(1, 1, 1, 1);
+        assertEquals(Color.WHITE, new Color(img.getRGB(0, 0)));
+        assertEquals(Color.RED, new Color(img.getRGB(1, 1)));
+        assertEquals(Color.WHITE, new Color(img.getRGB(2, 2)));
+        return img;
+    }
+
+    private static BufferedImage createImg2() {
+        BufferedImage img = new BufferedImage(150, 150, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = (Graphics2D) img.getGraphics();
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, 150, 150);
+        g.setColor(Color.RED);
+        g.fillRect(50, 50, 50, 50);
+        return img;
+    }
+
+    @Test
+    public void testAutoCrop() throws IOException, InterruptedException, InvocationTargetException {
+        openWindow();
+
+        BufferedImage img = ImageIO.read(ImageTesterTest.class.getResourceAsStream("greenish.png"));
+        appendImage(img);
+        assertEquals(800, img.getWidth());
+        assertEquals(20, img.getHeight());
+        BufferedImage img2 = new BufferedImage(img.getWidth(), img.getHeight(), img.getType());
+        img = ImageUtils.autoCrop(img);
+        Graphics2D g = (Graphics2D) img2.getGraphics();
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, img2.getWidth(), img2.getHeight());
+        g.drawImage(img, (img2.getWidth() - img.getWidth()) / 2, (img2.getHeight() - img.getHeight()) / 2, null);
+        appendImage(img2);
+        assertEquals(424, img.getWidth());
+        assertEquals(11, img.getHeight());
+
+        saveWindowAsImage("testAutoCrop");
+        waitForWindowClosing();
+    }
+
+    @Test
+    public void testAutoCrop2() {
+        BufferedImage img = ImageUtils.autoCrop(createImg1());
+        assertEquals(1, img.getWidth());
+        assertEquals(1, img.getHeight());
+        assertEquals(Color.RED, new Color(img.getRGB(0, 0)));
+    }
+
+    @Test
+    public void testAutoCrop2Border() throws InterruptedException, InvocationTargetException {
+        BufferedImage img;
+
+        img = ImageUtils.autoCrop(createImg1(), 1, 0, 0, 0);
+        assertEquals(2, img.getWidth());
+        assertEquals(1, img.getHeight());
+        assertEquals(Color.WHITE, new Color(img.getRGB(0, 0)));
+        assertEquals(Color.RED, new Color(img.getRGB(1, 0)));
+
+        img = ImageUtils.autoCrop(createImg1(), 0, 1, 0, 0);
+        assertEquals(2, img.getWidth());
+        assertEquals(1, img.getHeight());
+        assertEquals(Color.RED, new Color(img.getRGB(0, 0)));
+        assertEquals(Color.WHITE, new Color(img.getRGB(1, 0)));
+
+        img = ImageUtils.autoCrop(createImg1(), 0, 0, 1, 0);
+        assertEquals(1, img.getWidth());
+        assertEquals(2, img.getHeight());
+        assertEquals(Color.WHITE, new Color(img.getRGB(0, 0)));
+        assertEquals(Color.RED, new Color(img.getRGB(0, 1)));
+
+        img = ImageUtils.autoCrop(createImg1(), 0, 0, 0, 1);
+        assertEquals(1, img.getWidth());
+        assertEquals(2, img.getHeight());
+        assertEquals(Color.RED, new Color(img.getRGB(0, 0)));
+        assertEquals(Color.WHITE, new Color(img.getRGB(0, 1)));
+
+        img = ImageUtils.autoCrop(createImg2(), 50, 150, 100, 200);
+
+        openWindow();
+        appendImage(img);
+        saveWindowAsImage("testAutoCrop2Border");
+        waitForWindowClosing();
+    }
+
+    @Test
+    public void testAutoCrop3() {
+        BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = (Graphics2D) img.getGraphics();
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, 1, 1);
+
+        try {
+            img = ImageUtils.autoCrop(img);
+            fail();
+        } catch (IllegalArgumentException ex) {
+        }
+    }
+
+    @Test
+    public void testAutoCrop4() {
+        BufferedImage img = new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = (Graphics2D) img.getGraphics();
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, 3, 3);
+
+        try {
+            img = ImageUtils.autoCrop(img);
+            fail();
+        } catch (IllegalArgumentException ex) {
+        }
+    }
+
+    @Test
+    public void testDeepCopy() {
+        BufferedImage img = new BufferedImage(10, 10, BufferedImage.TYPE_BYTE_GRAY);
+        BufferedImage img2 = ImageUtils.deepCopy(img);
+
+        assertTrue(img.getColorModel().equals(img2.getColorModel()));
+        assertEquals(img.isAlphaPremultiplied(), img2.isAlphaPremultiplied());
+        assertEquals(img.getWidth(), img2.getWidth());
+        assertEquals(img.getHeight(), img2.getHeight());
+        for (int y = 0; y < img.getHeight(); y++) {
+            for (int x = 0; x < img.getWidth(); x++) {
+                assertEquals(img.getRGB(x, y), img2.getRGB(x, y));
+            }
+        }
+        img.getRaster().setPixel(1, 1, new int[]{120});
+        assertNotEquals(img.getRGB(1, 1), img2.getRGB(1, 1));
+    }
+
+    @SuppressWarnings("unused")
+	@Test
+    public void testDeepCopySubImage() {
+        BufferedImage img = new BufferedImage(10, 10, BufferedImage.TYPE_BYTE_GRAY);
+        BufferedImage img2 = ImageUtils.deepCopy(img.getSubimage(2, 2, 5, 6));
+    }
+
+    @Test
+    public void testDeducePaletteSimple() {
+        BufferedImage img = new BufferedImage(3, 1, BufferedImage.TYPE_INT_ARGB);
+        img.setRGB(0, 0, Color.BLUE.getRGB());
+        img.setRGB(1, 0, Color.CYAN.getRGB());
+        img.setRGB(2, 0, Color.CYAN.getRGB());
+        int[] pal = ImageUtils.deducePalette(img, 2);
+        assertEquals(2, pal.length);
+        Arrays.sort(pal);
+        assertEquals(Color.BLUE.getRGB(), pal[0]);
+        assertEquals(Color.CYAN.getRGB(), pal[1]);
+    }
+
+    @SuppressWarnings("unused")
+	@Test
+    public void testDeducePalettePerformance() {
+        BufferedImage img = GraphicsResource.OPENIMAJ_TESTRES_AESTHETICODE.loadImage().getSubimage(0, 0, 200, 200);
+        long start = System.currentTimeMillis();
+        int[] pal = ImageUtils.deducePalette(img, 32);
+        long duration = System.currentTimeMillis() - start;
+        log.info(String.format("deducePalette performance: %dkpix/sec", img.getWidth() * img.getHeight() / duration));
+    }
+
+    @Test
+    public void testFindClosest() {
+        int[] pal = new int[]{0, 1, 10};
+        assertEquals(0, ImageUtils.findClosest(pal, 0));
+        assertEquals(1, ImageUtils.findClosest(pal, 1));
+        assertEquals(1, ImageUtils.findClosest(pal, 5));
+        assertEquals(10, ImageUtils.findClosest(pal, 6));
+        assertEquals(10, ImageUtils.findClosest(pal, 255));
+
+        assertEquals(0, ImageUtils.findClosest(pal, 0 + 0xFFFF00));
+        assertEquals(1, ImageUtils.findClosest(pal, 1 + 0xFFFF00));
+        assertEquals(1, ImageUtils.findClosest(pal, 5 + 0xFF0000));
+        assertEquals(10, ImageUtils.findClosest(pal, 6 + 0xFFFF00));
+        assertEquals(10, ImageUtils.findClosest(pal, 255 + 0x00FF00));
+    }
+
+    @Test
+    public void testFindClosestBinary() {
+        int[] pal = new int[]{0, 1, 10};
+        assertEquals(0, ImageUtils.findClosestBinary(pal, 0));
+        assertEquals(1, ImageUtils.findClosestBinary(pal, 1));
+        assertEquals(1, ImageUtils.findClosestBinary(pal, 5));
+        assertEquals(10, ImageUtils.findClosestBinary(pal, 6));
+        assertEquals(10, ImageUtils.findClosestBinary(pal, 255));
+
+        assertEquals(0, ImageUtils.findClosestBinary(pal, 0 + 0xFFFF00));
+        assertEquals(1, ImageUtils.findClosestBinary(pal, 1 + 0xFFFF00));
+        assertEquals(1, ImageUtils.findClosestBinary(pal, 5 + 0xFF0000));
+        assertEquals(10, ImageUtils.findClosestBinary(pal, 6 + 0xFFFF00));
+        assertEquals(10, ImageUtils.findClosestBinary(pal, 255 + 0x00FF00));
+    }
+
+    public static void main(String[] args) throws InterruptedException, IOException {
+        log.info("started");
+        Thread t = ClassReloader.watchLoadAndRun("target/test-classes", ImageUtilsTest.class.getName());
+        t.join();
+    }
+
+    @Override
+    public void run() {
+        log.info("running");
+        try {
+            testFindClosest();
+        } catch (Throwable ex) {
+            log.error("", ex);
+        }
+    }
 
     @Test
     public void testScale() {
