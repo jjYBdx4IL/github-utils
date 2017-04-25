@@ -24,10 +24,11 @@ package com.github.jjYBdx4IL.utils.net;
  * #L%
  */
 
-import com.github.jjYBdx4IL.utils.net.AddressUtils;
+import com.github.jjYBdx4IL.utils.env.CI;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Assume;
 
 /**
  *
@@ -40,6 +41,9 @@ public class AddressUtilsTest {
 
     @Test
     public void testGetNonLocalHostIPAddress() throws Exception {
+        // don't run this test where we can't control host configurations
+        Assume.assumeFalse(CI.isPublic());
+        
         assertTrue(AddressUtils.getNonLocalHostIPAddress().getHostAddress().startsWith("192.168."));
     }
 
