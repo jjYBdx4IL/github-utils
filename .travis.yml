@@ -1,5 +1,7 @@
 language: java
 before_install:
+  - git clone https://github.com/jjYBdx4IL/github-parent
+  - mvn install -f github-parent -DskipTests
   - git clone https://github.com/jjYBdx4IL/diskcache
   - mvn install -f diskcache -DskipTests
 env:
