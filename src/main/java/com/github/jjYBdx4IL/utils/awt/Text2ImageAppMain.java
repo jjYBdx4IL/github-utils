@@ -31,12 +31,12 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,8 +54,8 @@ import org.fit.cssbox.css.CSSNorm;
 import org.fit.cssbox.css.DOMAnalyzer;
 import org.fit.cssbox.io.DOMSource;
 import org.fit.cssbox.io.DefaultDOMSource;
-import org.fit.cssbox.io.DefaultDocumentSource;
 import org.fit.cssbox.io.DocumentSource;
+import org.fit.cssbox.io.StreamDocumentSource;
 import org.fit.cssbox.layout.BrowserCanvas;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -381,10 +381,7 @@ public class Text2ImageAppMain {
     public void runHtmlConversion() throws MalformedURLException, IOException, SAXException {
         URL url = new File(getOptInputFileName()).toURI().toURL();
         LOG.debug("reading: " + url.toString());
-        URLConnection con = url.openConnection();
-        //use the final URL as the base URL later (possible redirects)
-        url = con.getURL();
-        DocumentSource src = new DefaultDocumentSource(url);
+        DocumentSource src = new StreamDocumentSource(new ByteArrayInputStream(IOUtils.toByteArray(url)), url, "text/html");
         //Parse the input document (replace this with your own parser if desired)
         DOMSource parser = new DefaultDOMSource(src);
         Document doc = parser.parse(); //doc represents the obtained DOM

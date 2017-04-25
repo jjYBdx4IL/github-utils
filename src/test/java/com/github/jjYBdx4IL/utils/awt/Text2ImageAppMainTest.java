@@ -23,9 +23,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import javax.imageio.ImageIO;
+import org.apache.commons.io.FileUtils;
 
 import org.apache.commons.io.IOUtils;
 import static org.junit.Assert.assertEquals;
@@ -69,18 +71,19 @@ public class Text2ImageAppMainTest {
     private static final String htmlPart3 = "</body>\n"
             + "</html>";
 
-    public static void deleteTempFiles() {
-        for (File file : new File[]{PNG1_FILE, PNG2_FILE, PNG2_FILE,
-            HTML_FILE}) {
-            if (file.exists()) {
-                file.delete();
-            }
-        }
-    }
+//    public static void deleteTempFiles() {
+//        for (File file : new File[]{PNG1_FILE, PNG2_FILE, PNG2_FILE,
+//            HTML_FILE}) {
+//            if (file.exists()) {
+//                file.delete();
+//            }
+//        }
+//    }
 
     @Before
-    public void before() {
-        FileUtil.provideCleanDirectory(TARGET_DIR);
+    public void before() throws IOException {
+        TARGET_DIR.mkdirs();
+        FileUtils.cleanDirectory(TARGET_DIR);
     }
 
     @Test
@@ -209,9 +212,9 @@ public class Text2ImageAppMainTest {
 
     @Test
     public void testHtmlConversionLatin1HeadLatin1Content() throws Exception {
-
-        IOUtils.write(htmlPart1 + "ISO-8859-1" + htmlPart2 + manyUe + htmlPart3,
-                new FileOutputStream(HTML_FILE), Charset.forName("ISO-8859-1"));
+        try (OutputStream os = new FileOutputStream(HTML_FILE)) {
+            IOUtils.write(htmlPart1 + "ISO-8859-1" + htmlPart2 + manyUe + htmlPart3, os, Charset.forName("ISO-8859-1"));
+        }
         new Text2ImageAppMain().run(new String[]{"-i", HTML_FILE.getPath(), "-o", PNG1_FILE.getPath(),
             "--html", "--htmlWidth", "1"});
         BufferedImage img = ImageIO.read(PNG1_FILE);
@@ -221,8 +224,9 @@ public class Text2ImageAppMainTest {
 
     @Test
     public void testHtmlConversionUTF8HeadUTF8Content() throws Exception {
-        IOUtils.write(htmlPart1 + "UTF-8" + htmlPart2 + manyUe + htmlPart3,
-                new FileOutputStream(HTML_FILE), Charset.forName("UTF-8"));
+        try (OutputStream os = new FileOutputStream(HTML_FILE)) {
+            IOUtils.write(htmlPart1 + "UTF-8" + htmlPart2 + manyUe + htmlPart3, os, Charset.forName("UTF-8"));
+        }
         new Text2ImageAppMain().run(new String[]{"-i", HTML_FILE.getPath(), "-o", PNG1_FILE.getPath(),
             "--html", "--htmlWidth", "1"});
         BufferedImage img = ImageIO.read(PNG1_FILE);
@@ -233,8 +237,9 @@ public class Text2ImageAppMainTest {
 
     @Test
     public void testHtmlConversionLatin1HeadUTF8Content() throws Exception {
-        IOUtils.write(htmlPart1 + "latin1" + htmlPart2 + manyUe + htmlPart3,
-                new FileOutputStream(HTML_FILE), Charset.forName("UTF-8"));
+        try (OutputStream os = new FileOutputStream(HTML_FILE)) {
+            IOUtils.write(htmlPart1 + "latin1" + htmlPart2 + manyUe + htmlPart3, os, Charset.forName("UTF-8"));
+        }
         new Text2ImageAppMain().run(new String[]{"-i", HTML_FILE.getPath(), "-o", PNG1_FILE.getPath(),
             "--html", "--htmlWidth", "1"});
         BufferedImage img = ImageIO.read(PNG1_FILE);
@@ -244,8 +249,9 @@ public class Text2ImageAppMainTest {
 
     @Test
     public void testHtmlConversionUTF8HeadLatin1Content() throws Exception {
-        IOUtils.write(htmlPart1 + "UTF-8" + htmlPart2 + manyUe + htmlPart3,
-                new FileOutputStream(HTML_FILE), Charset.forName("latin1"));
+        try (OutputStream os = new FileOutputStream(HTML_FILE)) {
+            IOUtils.write(htmlPart1 + "UTF-8" + htmlPart2 + manyUe + htmlPart3, os, Charset.forName("latin1"));
+        }
         new Text2ImageAppMain().run(new String[]{"-i", HTML_FILE.getPath(), "-o", PNG1_FILE.getPath(),
             "--html", "--htmlWidth", "1"});
         BufferedImage img = ImageIO.read(PNG1_FILE);
