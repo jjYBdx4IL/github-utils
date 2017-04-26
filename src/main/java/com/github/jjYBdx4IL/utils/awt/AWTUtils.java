@@ -15,6 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils.awt;
 
+import java.awt.Container;
 import java.awt.Dialog;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -22,12 +23,20 @@ import java.awt.MouseInfo;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.AbstractAction;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -35,6 +44,8 @@ import javax.swing.Timer;
  */
 public class AWTUtils {
 
+    private static final Logger LOG = LoggerFactory.getLogger(AWTUtils.class);
+    
     public static final int POS_LEFT = 1, POS_CENTER_X = 2, POS_RIGHT = 4;
     public static final int POS_TOP = 8, POS_CENTER_Y = 16, POS_BOTTOM = 32;
 
@@ -236,6 +247,54 @@ public class AWTUtils {
         return myScreenIndex;
     }
 
+    /**
+     * Used for testing stuff interactively.
+     */
+    public static void showFrameAndWaitForCloseByUser() {
+        final JFrame frame = new JFrame();
+        Container container = frame.getContentPane();
+        JLabel label = new JLabel("Close me to continue...");
+        container.add(label);
+        
+        showFrameAndWaitForCloseByUser(frame);
+    }
+    
+    /**
+     * Used for testing stuff interactively.
+     */
+    public static void showFrameAndWaitForCloseByUser(final JFrame frame) {
+        frame.pack();
+        AWTUtils.centerOnMouseScreen(frame);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                LOG.trace("closing " + frame.isVisible() + " " + e.paramString());
+                synchronized (frame) {
+                    frame.notify();
+                }
+            }
+        });
+        frame.setVisible(true);
+
+        final AtomicBoolean done = new AtomicBoolean(false);
+        while (!done.get()) {
+            synchronized (frame) {
+                try {
+                    frame.wait(1000L);
+
+                    SwingUtilities.invokeAndWait(new Runnable() {
+                        @Override
+                        public void run() {
+                            done.set(!frame.isVisible());
+                        }
+                    });
+                } catch (InterruptedException | InvocationTargetException ex) {
+                    LOG.warn("", ex);
+                }
+            }
+        }
+    }
+    
     private AWTUtils() {
     }
 }
