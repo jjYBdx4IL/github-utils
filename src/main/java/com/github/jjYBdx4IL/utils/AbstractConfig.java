@@ -16,6 +16,7 @@
 package com.github.jjYBdx4IL.utils;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 
 import java.io.ByteArrayInputStream;
@@ -48,21 +49,40 @@ import org.xml.sax.InputSource;
 public abstract class AbstractConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractConfig.class);
-    static final String DEFAULT_STRING_VALUE = "replace or delete me";
+    protected static final String DEFAULT_STRING_VALUE = "replace or delete me";
     public static final Pattern APP_NAME_PATTERN = Pattern.compile("^[a-zA-Z0-9]+$");
-    final File cfgDir;
+    @XStreamOmitField
+    private final File cfgDir;
+    @XStreamOmitField
+    private final boolean manualEditMode;
 
     /**
      * 
      *
      * @param appName identifies your application and implicitly defines the location of your config directory
      * on disk. Allowed characters: A-Z, a-z, 0-9
+     * @param manualEditMode write default config to disk and throw an exception telling the user to edit the config
+     * if no config is found when trying to read it. In this operational mode the postprocess method should also check
+     * whether the user has actually edited the config file and bail if not.
      */
-    public AbstractConfig(String appName) {
+    public AbstractConfig(String appName, boolean manualEditMode) {
+    	this.manualEditMode = manualEditMode;
         if (appName == null || !APP_NAME_PATTERN.matcher(appName).find()) {
             throw new IllegalArgumentException("appName param is null");
         }
         cfgDir = new File(System.getProperty("user.home"), ".config" + File.separatorChar + appName);
+    }
+    
+    public AbstractConfig(Class<?> klazz, boolean manualEditMode) {
+        this(klazz.getCanonicalName(), manualEditMode);
+    }
+    
+    public AbstractConfig(String appName) {
+    	this(appName, false);
+    }
+
+    public AbstractConfig(Class<?> klazz) {
+    	this(klazz.getCanonicalName(), false);
     }
 
     public static String formatXml(String xml) {
@@ -86,9 +106,21 @@ public abstract class AbstractConfig {
         }
     }
 
-    void postprocess() {
+    protected void postprocess() {
     }
 
+    protected void readDidntFindConfigFile() {
+    	if (manualEditMode) {
+			try {
+				write();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+			File file = getConfigFile();
+			throw new RuntimeException("writing new config file, please update " + file.getAbsolutePath());
+    	}
+    }
+    
     protected File getConfigFile() {
         String filename = getClass().getSimpleName().toLowerCase(Locale.ROOT);
         filename = filename.replaceFirst("config$", "");
@@ -106,6 +138,8 @@ public abstract class AbstractConfig {
             xstream.fromXML(configFile, this);
             postprocess();
             return true;
+        } else {
+        	readDidntFindConfigFile();
         }
 
         return false;
