@@ -75,7 +75,7 @@ public class Surefire extends Maven {
      * 
      * @return true iff being run as a single test (method, not a test unit!)
      */
-    public static boolean isSingleTextExecution() {
+    public static boolean isSingleTestExecution() {
         return isEclipseDirectSingleJUnit()
                 || Maven.getMavenBasedir() != null && System.getProperty("test", "").contains("#");
     }
