@@ -33,7 +33,7 @@ public class AWTUtilsTest {
 
     @Before
     public void before() {
-        Assume.assumeTrue(Surefire.isSingleTextExecution());
+        Assume.assumeTrue(Surefire.isSingleTestExecution());
     }
 
     @Test
@@ -48,7 +48,7 @@ public class AWTUtilsTest {
 
     @Test
     public void testShowPopupNotification() throws InterruptedException {
-        Assume.assumeTrue(Surefire.isSingleTextExecution());
+        Assume.assumeTrue(Surefire.isSingleTestExecution());
 
         AWTUtils.showPopupNotification(-1, "some test message", AWTUtils.POS_RIGHT|AWTUtils.POS_BOTTOM, 5000, false);
         Thread.sleep(7000L);

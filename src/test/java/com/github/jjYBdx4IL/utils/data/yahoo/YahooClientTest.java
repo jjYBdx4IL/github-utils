@@ -43,7 +43,7 @@ public class YahooClientTest {
     @Test
     public void testGetSortedList() throws IOException, ParseException {
         // for stability, don't run this test unless run specifically
-        Assume.assumeTrue(Surefire.isSingleTextExecution());
+        Assume.assumeTrue(Surefire.isSingleTestExecution());
 
         YahooClient yahoo = new YahooClient();
     	YahooObservations quotes = yahoo.get("^TNX", YahooIval.MONTH);

@@ -46,7 +46,7 @@ public class FMAClientTest {
 
     @Test
     public void testLongSearch() throws IOException {
-        Assume.assumeTrue(Surefire.isSingleTextExecution());
+        Assume.assumeTrue(Surefire.isSingleTestExecution());
 
         FMASearchResult result = FMAClient.search(null, true);
         assertNotNull(result);

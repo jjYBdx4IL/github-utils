@@ -32,7 +32,7 @@ public class ClipBoardListenerTest {
 
     @Test
     public void test() throws InterruptedException {
-        assumeTrue(Surefire.isSingleTextExecution());
+        assumeTrue(Surefire.isSingleTestExecution());
 
         new ClipBoardListener() {
             @Override
