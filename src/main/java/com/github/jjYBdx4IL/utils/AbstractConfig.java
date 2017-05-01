@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright (C) 2016-2017 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ public abstract class AbstractConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractConfig.class);
     protected static final String DEFAULT_STRING_VALUE = "replace or delete me";
-    public static final Pattern APP_NAME_PATTERN = Pattern.compile("^[a-zA-Z0-9]+$");
+    public static final Pattern APP_NAME_PATTERN = Pattern.compile("^[a-zA-Z0-9.]+$");
     @XStreamOmitField
     private final File cfgDir;
     @XStreamOmitField
@@ -68,7 +68,7 @@ public abstract class AbstractConfig {
     public AbstractConfig(String appName, boolean manualEditMode) {
     	this.manualEditMode = manualEditMode;
         if (appName == null || !APP_NAME_PATTERN.matcher(appName).find()) {
-            throw new IllegalArgumentException("appName param is null");
+            throw new IllegalArgumentException("appName param is null or invalid");
         }
         cfgDir = new File(System.getProperty("user.home"), ".config" + File.separatorChar + appName);
     }
@@ -121,7 +121,7 @@ public abstract class AbstractConfig {
     	}
     }
     
-    protected File getConfigFile() {
+    public File getConfigFile() {
         String filename = getClass().getSimpleName().toLowerCase(Locale.ROOT);
         filename = filename.replaceFirst("config$", "");
         filename += ".xml";

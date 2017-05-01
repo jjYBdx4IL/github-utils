@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright (C) 2016-2017 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils;
 
-/*
- * #%L
- * github-utils
- * %%
- * Copyright (C) 2017 Github jjYBdx4IL Projects
- * %%
- * #L%
- */
+import static com.github.jjYBdx4IL.utils.AbstractConfig.APP_NAME_PATTERN;
 import java.io.File;
 
 import static org.junit.Assert.*;
@@ -63,4 +56,10 @@ public class AbstractConfigTest {
         assertEquals("CONFIG VALUE 2", config2.configOption2);
     }
 
+    @Test
+    public void testAppNamePattern() {
+        assertFalse(APP_NAME_PATTERN.matcher("").find());
+        assertFalse(APP_NAME_PATTERN.matcher("a,").find());
+        assertTrue(APP_NAME_PATTERN.matcher("a.0B").find());
+    }
 }
