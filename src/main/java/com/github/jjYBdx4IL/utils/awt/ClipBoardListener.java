@@ -101,6 +101,7 @@ public abstract class ClipBoardListener implements ClipboardOwner {
                 final String newText = onContentChange(tempText);
                 takeOwnership(newText);
             }
+            // else { TODO } FIXME: we don't call takeOwnership here...
         } catch (UnsupportedFlavorException | IOException e) {
             LOG.error("", e);
         }

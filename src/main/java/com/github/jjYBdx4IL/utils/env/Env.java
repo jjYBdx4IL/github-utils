@@ -15,9 +15,11 @@
  */
 package com.github.jjYBdx4IL.utils.env;
 
+import com.github.jjYBdx4IL.utils.AbstractConfig;
 import com.github.jjYBdx4IL.utils.windows.WindowsUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -103,25 +105,57 @@ public class Env {
         }
         return value;
     }
-    
-    public static boolean isLinux() {
-    	return System.getProperty("os.name").toLowerCase().startsWith("linux");
-    }
-    
-    public static boolean isWindows() {
-    	return System.getProperty("os.name").toLowerCase().startsWith("windows");
-    }
-    
-    public static void assertWindows() {
-		if (!isWindows()) {
-			throw new RuntimeException("function not implemented for this platform");
-		}
-    }
-    
-	public static File getDesktopDir() {
-		assertWindows();
 
-		return new File(WindowsUtils.getCurrentUserDesktopPath());
-	}
+    public static boolean isLinux() {
+        return System.getProperty("os.name").toLowerCase().startsWith("linux");
+    }
+
+    public static boolean isWindows() {
+        return System.getProperty("os.name").toLowerCase().startsWith("windows");
+    }
+
+    public static void assertWindows() {
+        if (!isWindows()) {
+            throw new RuntimeException("function not implemented for this platform");
+        }
+    }
+
+    public static File getDesktopDir() {
+        assertWindows();
+
+        return new File(WindowsUtils.getCurrentUserDesktopPath());
+    }
+
+    public static File getCacheDir(String appName) {
+        if (!AbstractConfig.APP_NAME_PATTERN.matcher(appName).find()) {
+            throw new IllegalArgumentException("invalid app name: " + appName);
+        }
+        String localAppData = System.getenv("LOCALAPPDATA");
+        if (localAppData != null) {
+            return new File(new File(localAppData, appName), "cache");
+        }
+        return new File(new File(System.getProperty("user.home"), ".cache"), appName);
+    }
+    
+    public static File getLogDir(String appName) {
+        if (!AbstractConfig.APP_NAME_PATTERN.matcher(appName).find()) {
+            throw new IllegalArgumentException("invalid app name: " + appName);
+        }
+        String localAppData = System.getenv("LOCALAPPDATA");
+        if (localAppData != null) {
+            return new File(new File(localAppData, appName), "log");
+        }
+        return new File(new File(new File(System.getProperty("user.home"), ".cache"), appName), "log");
+    }
+
+    public static File provideLogDir(String appName) throws IOException {
+        File logDir = getLogDir(appName);
+        if (!logDir.exists()) {
+            if (!logDir.mkdirs() || !logDir.exists() || !logDir.isDirectory()) {
+                throw new IOException("failed to create directory "+ logDir.getAbsolutePath());
+            }
+        }
+        return logDir;
+    }
 
 }
