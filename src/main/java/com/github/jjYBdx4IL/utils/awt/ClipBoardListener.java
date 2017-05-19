@@ -19,6 +19,8 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.FlavorEvent;
+import java.awt.datatransfer.FlavorListener;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
@@ -28,13 +30,18 @@ import org.slf4j.LoggerFactory;
 /**
  * Usage: <pre>new ClipBoardListener() {...}.start();</pre>
  * 
+ * This class is a workaround to the fact that Java does not provide a generic Clipboard listener interface.
+ * (maybe because the clipboard is usually accessed via hotkeys)
+ * 
+ * Works by always taking ownership of the clipboard, settings its contents to the value
+ * returned by {@link #onContentChange(String)} -- unless the content is not some variant of text.
+ * In that case we rely on a data flavor change.
+ * 
  * @author jjYBdx4IL
  */
-public abstract class ClipBoardListener implements ClipboardOwner {
+public abstract class ClipBoardListener implements ClipboardOwner, FlavorListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClipBoardListener.class);
-
-    Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
 
     public ClipBoardListener() {
     }
@@ -46,7 +53,7 @@ public abstract class ClipBoardListener implements ClipboardOwner {
         Transferable contents = null;
         while (!doneWaiting) {
             try {
-                contents = sysClip.getContents(this);
+                contents = c.getContents(this);
                 doneWaiting = true;
             } catch (IllegalStateException ex) {
                 try {
@@ -64,10 +71,12 @@ public abstract class ClipBoardListener implements ClipboardOwner {
     }
 
     public void start() {
-        takeOwnership("");
+        Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
+        takeOwnership(c, "");
     }
     
-    void takeOwnership(final String text) {
+    void takeOwnership(final Clipboard c, final String text) {
+        LOG.debug("taking clipboard ownership, setting content to: " + text);
         Transferable t = new Transferable() {
 
             final String data = text;
@@ -87,7 +96,7 @@ public abstract class ClipBoardListener implements ClipboardOwner {
                 return data;
             }
         };
-        sysClip.setContents(t, this);
+        c.setContents(t, this);
     }
 
     public void processClipBoard(Transferable t, Clipboard c) { //your implementation
@@ -99,14 +108,23 @@ public abstract class ClipBoardListener implements ClipboardOwner {
                 tempText = (String) trans.getTransferData(DataFlavor.stringFlavor);
                 LOG.debug(tempText);
                 final String newText = onContentChange(tempText);
-                takeOwnership(newText);
+                takeOwnership(c, newText);
+            } else {
+                c.addFlavorListener(this);
             }
-            // else { TODO } FIXME: we don't call takeOwnership here...
         } catch (UnsupportedFlavorException | IOException e) {
             LOG.error("", e);
         }
     }
 
     public abstract String onContentChange(String newTextContent);
+
+    @Override
+    public void flavorsChanged(FlavorEvent e) {
+        Clipboard c = (Clipboard) e.getSource();
+        c.removeFlavorListener(this);
+        Transferable trans = c.getContents(this);
+        processClipBoard(trans, c);
+    }
 
 }
