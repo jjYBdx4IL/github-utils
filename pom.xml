@@ -139,14 +139,14 @@
         <dependency>
             <groupId>com.github.jjYBdx4IL</groupId>
             <artifactId>github-test-utils</artifactId>
-            <version>1.0</version>
+            <version>1.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.github.jjYBdx4IL</groupId>
             <artifactId>github-test-utils</artifactId>
             <classifier>tests</classifier>
-            <version>1.0</version>
+            <version>1.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 

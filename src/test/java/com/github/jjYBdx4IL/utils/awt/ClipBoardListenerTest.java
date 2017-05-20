@@ -16,6 +16,8 @@
 package com.github.jjYBdx4IL.utils.awt;
 
 import com.github.jjYBdx4IL.utils.env.Surefire;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
 import java.util.Locale;
 import static org.junit.Assume.assumeTrue;
 import org.junit.Test;
@@ -34,13 +36,15 @@ public class ClipBoardListenerTest {
     public void test() throws InterruptedException {
         assumeTrue(Surefire.isSingleTestExecution());
 
+        Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
+        
         new ClipBoardListener() {
             @Override
             public String onContentChange(String newTextContent) {
                 LOG.info(newTextContent);
                 return newTextContent.toUpperCase(Locale.ROOT);
             }
-        }.takeOwnership("");
+        }.takeOwnership(c, "");
 
         AWTUtils.showFrameAndWaitForCloseByUser();
     }

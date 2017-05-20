@@ -24,11 +24,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.imageio.ImageIO;
+import org.apache.commons.io.IOUtils;
 
 import static org.junit.Assert.*;
 import org.junit.Assume;
 import org.junit.Test;
-import org.openqa.selenium.io.IOUtils;
 
 /**
  *
@@ -62,7 +62,7 @@ public class ResourceUtilsTest {
         assertTrue(extracted.exists());
         String input = null;
         try (InputStream is = new FileInputStream(extracted)) {
-            input = IOUtils.readFully(is);
+            input = IOUtils.toString(is, "UTF-8");
         }
         assertTrue(extracted.delete());
         assertTrue(input.contains("coherent-logic-fred-client-2nd-fork"));

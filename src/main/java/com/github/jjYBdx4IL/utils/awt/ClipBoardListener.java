@@ -96,7 +96,18 @@ public abstract class ClipBoardListener implements ClipboardOwner, FlavorListene
                 return data;
             }
         };
-        c.setContents(t, this);
+        while (true) {
+            try {
+                c.setContents(t, this);
+                return;
+            } catch (IllegalStateException ex) {
+                try {
+                    Thread.sleep(250L);
+                } catch (InterruptedException ex1) {
+                    LOG.error("", ex1);
+                }
+            }
+        }
     }
 
     public void processClipBoard(Transferable t, Clipboard c) { //your implementation
