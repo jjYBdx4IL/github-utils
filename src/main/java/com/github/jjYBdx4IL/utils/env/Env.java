@@ -126,6 +126,10 @@ public class Env {
         return new File(WindowsUtils.getCurrentUserDesktopPath());
     }
 
+    public static File getConfigDir(Class<?> classRef) {
+        return getConfigDir(classRef.getName());
+    }
+    
     public static File getConfigDir(String appName) {
         if (!AbstractConfig.APP_NAME_PATTERN.matcher(appName).find()) {
             throw new IllegalArgumentException("invalid app name: " + appName);
