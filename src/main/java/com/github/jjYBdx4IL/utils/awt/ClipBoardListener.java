@@ -48,7 +48,7 @@ public abstract class ClipBoardListener implements ClipboardOwner, FlavorListene
     
     @Override
     public void lostOwnership(Clipboard c, Transferable t) {
-
+        LOG.debug("lostOwnership() " + c);
         boolean doneWaiting = false;
         Transferable contents = null;
         while (!doneWaiting) {
@@ -56,6 +56,7 @@ public abstract class ClipBoardListener implements ClipboardOwner, FlavorListene
                 contents = c.getContents(this);
                 doneWaiting = true;
             } catch (IllegalStateException ex) {
+                LOG.debug("IllegalStateException while trying to READ clipboard contents, retrying...");
                 try {
                     Thread.sleep(250L);
                 } catch (InterruptedException ex1) {
@@ -101,6 +102,7 @@ public abstract class ClipBoardListener implements ClipboardOwner, FlavorListene
                 c.setContents(t, this);
                 return;
             } catch (IllegalStateException ex) {
+                LOG.debug("IllegalStateException while trying to WRITE clipboard contents, retrying...");
                 try {
                     Thread.sleep(250L);
                 } catch (InterruptedException ex1) {
@@ -121,6 +123,7 @@ public abstract class ClipBoardListener implements ClipboardOwner, FlavorListene
                 final String newText = onContentChange(tempText);
                 takeOwnership(c, newText);
             } else {
+                LOG.debug("adding flavor listener " + this);
                 c.addFlavorListener(this);
             }
         } catch (UnsupportedFlavorException | IOException e) {
@@ -133,6 +136,8 @@ public abstract class ClipBoardListener implements ClipboardOwner, FlavorListene
     @Override
     public void flavorsChanged(FlavorEvent e) {
         Clipboard c = (Clipboard) e.getSource();
+        LOG.debug("flavorsChanged() " + c);
+        LOG.debug("removing flavor listener " + this);
         c.removeFlavorListener(this);
         Transferable trans = c.getContents(this);
         processClipBoard(trans, c);

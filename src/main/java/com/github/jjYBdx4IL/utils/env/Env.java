@@ -126,6 +126,17 @@ public class Env {
         return new File(WindowsUtils.getCurrentUserDesktopPath());
     }
 
+    public static File getConfigDir(String appName) {
+        if (!AbstractConfig.APP_NAME_PATTERN.matcher(appName).find()) {
+            throw new IllegalArgumentException("invalid app name: " + appName);
+        }
+        String localAppData = System.getenv("LOCALAPPDATA");
+        if (localAppData != null) {
+            return new File(new File(localAppData, appName), "config");
+        }
+        return new File(new File(System.getProperty("user.home"), ".config"), appName);
+    }
+    
     public static File getCacheDir(String appName) {
         if (!AbstractConfig.APP_NAME_PATTERN.matcher(appName).find()) {
             throw new IllegalArgumentException("invalid app name: " + appName);
