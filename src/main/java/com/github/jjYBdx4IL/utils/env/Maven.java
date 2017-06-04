@@ -17,6 +17,7 @@ package com.github.jjYBdx4IL.utils.env;
 
 import java.io.File;
 import java.net.URI;
+import java.net.URL;
 
 /**
  *
@@ -42,19 +43,30 @@ public class Maven extends JavaProcess {
      * found.
      * 
      * @param classRef
+     * @throws IllegalStateException
+     *             if no pom.xml was found
      * @return
      */
     public static URI getBasedir(Class<?> classRef) {
-        String classLoc = classRef.getClassLoader().getResource(classRef.getName().replace('.', '/') + ".class")
-                .toExternalForm();
+        URL classLocURL = classRef.getClassLoader().getResource(classRef.getName().replace('.', '/') + ".class");
+        if (classLocURL == null) {
+            throw new IllegalStateException(
+                    "class " + classRef.getName() + " not found on its classloader's classpath");
+        }
+        String classLoc = classLocURL.toExternalForm();
         String classpathEntry = classLoc.substring(0, classLoc.length() - classRef.getName().length() - 6);
-        if (classpathEntry.startsWith("jar:file:")) {
-            throw new RuntimeException("class " + classRef.getName() + " has been loaded from jar resource");
+        if (!classpathEntry.startsWith("file:/")) {
+            throw new IllegalStateException("class " + classRef.getName()
+                    + " has been loaded from resource not starting with file:/: " + classpathEntry);
         }
         String cpEntryFileLoc = classpathEntry.substring("file:/".length());
         File projectBaseDir = new File(cpEntryFileLoc).getParentFile();
         while (projectBaseDir != null && !new File(projectBaseDir, "pom.xml").exists()) {
             projectBaseDir = projectBaseDir.getParentFile();
+        }
+        if (projectBaseDir == null) {
+            throw new IllegalStateException("maven project basedir not found for " + classRef.getName()
+                    + " because no parent directory of " + cpEntryFileLoc + " has a pom.xml entry!");
         }
         return projectBaseDir.toURI();
     }
