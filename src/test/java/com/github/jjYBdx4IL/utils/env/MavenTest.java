@@ -27,15 +27,15 @@ import org.junit.Test;
 public class MavenTest {
 
     @Test
-    public void testGetBasedirByClassRef() {
+    public void testGetBasedirCpOnly() {
         assumeNotNull(System.getProperty("basedir"));
         
-        URI uri = Maven.getBasedir(getClass());
+        URI uri = Maven.getBasedirCpOnly(getClass());
         assertTrue(new File(System.getProperty("basedir")).equals(new File(uri)));
         
         // fail on class loaded from jar file
         try {
-            Maven.getBasedir(FileUtils.class);
+            Maven.getBasedirCpOnly(FileUtils.class);
             fail();
         } catch (IllegalStateException ex) {}
     }

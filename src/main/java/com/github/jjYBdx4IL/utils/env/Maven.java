@@ -36,18 +36,31 @@ public class Maven extends JavaProcess {
     }
 
     /**
-     * Use class file location on disk to find maven project basedir. This only
-     * works for classes that are loaded from directories below the basedir, ie.
-     * not via classes loaded from jar files. The directory structure is then
-     * followed upwards until the maven project descriptor file pom.xml is
-     * found.
-     * 
-     * @param classRef
-     * @throws IllegalStateException
-     *             if no pom.xml was found
+     * This is an optimized frontend method for {@link #getBasedirCpOnly(java.lang.Class) }. It tries to determine the
+     * maven project's basedir by calling {@link Surefire#getMavenBasedir() } first, and only using the classpath
+     * resolution if that fails.
+     *
+     * @param classRef only used if basedir determination by system properties only fails
      * @return
      */
     public static URI getBasedir(Class<?> classRef) {
+        try {
+            return new File(Surefire.getMavenBasedir()).toURI();
+        } catch (IllegalStateException ex) { // exception should only be thrown when we go the slower route anyways
+        }
+        return getBasedirCpOnly(classRef);
+    }
+
+    /**
+     * Use class file location on disk to find maven project basedir. This only works for classes that are loaded from
+     * directories below the basedir, ie. not via classes loaded from jar files. The directory structure is then
+     * followed upwards until the maven project descriptor file pom.xml is found.
+     *
+     * @param classRef
+     * @throws IllegalStateException if no pom.xml was found
+     * @return
+     */
+    public static URI getBasedirCpOnly(Class<?> classRef) {
         URL classLocURL = classRef.getClassLoader().getResource(classRef.getName().replace('.', '/') + ".class");
         if (classLocURL == null) {
             throw new IllegalStateException(

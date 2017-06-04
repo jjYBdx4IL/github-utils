@@ -26,7 +26,10 @@ import java.util.logging.Logger;
  */
 public class Surefire extends Maven {
 
-    public final static String PROPNAME_SUREFIRE_TEST_CLASS_PATH = "surefire.test.class.path";
+    public static final String PROPNAME_SUREFIRE_TEST_CLASS_PATH = "surefire.test.class.path";
+    public static final String PROPNAME_SUN_JAVA_CMD = "sun.java.command";
+    public static final String PROPNAME_BASEDIR = "basedir";
+    public static final String ECLIPSE_TESTRUNNER_PREFIX = "org.eclipse.jdt.internal.junit.runner.RemoteTestRunner ";
 
     public static String getSurefireTestClassPath() {
         String s = System.getProperty(PROPNAME_SUREFIRE_TEST_CLASS_PATH);
@@ -35,44 +38,60 @@ public class Surefire extends Maven {
         }
         return s;
     }
-    
+
     /**
      * JUnit test being run inside Eclipse without calling maven?
-     * 
+     *
      * @return true iff being run as direct junit test in Eclipse without maven
      */
     public static boolean isEclipseDirectJUnit() {
-        if (Maven.getMavenBasedir() == null && System.getProperty("sun.java.command").startsWith("org.eclipse.jdt.internal.junit.runner.RemoteTestRunner ")) {
-        	return true;
+        if (Maven.getMavenBasedir() == null
+                && System.getProperty(PROPNAME_SUN_JAVA_CMD).startsWith(ECLIPSE_TESTRUNNER_PREFIX)) {
+            return true;
         }
-    	return false;
-    }
-    
-    /**
-     * <b>Single</b> JUnit test being run inside Eclipse without calling maven?
-     * 
-     * @return iff being run as <b>Single</b> JUnit test inside Eclipse without maven
-     */
-    public static boolean isEclipseDirectSingleJUnit() {
-        if (System.getProperty("basedir") == null
-      			&& System.getProperty("sun.java.command").startsWith("org.eclipse.jdt.internal.junit.runner.RemoteTestRunner ")
-      			&& System.getProperty("sun.java.command").contains(" -test ")) {
-        	return true;
-        }
-    	return false;
-    }
-    
-    public static String getMavenBasedir() {
-    	if (isEclipseDirectJUnit()) {
-    		return System.getProperty("user.dir");
-    	}
-        return Maven.getMavenBasedir();
+        return false;
     }
 
     /**
-     * Some junit tests might require user interaction. You may use
-     * this function together with a junit assumption to prevent running those tests in junit batch runs.
-     * 
+     * <b>Single</b> JUnit test being run inside Eclipse without calling maven?
+     *
+     * @return iff being run as <b>Single</b> JUnit test inside Eclipse without maven
+     */
+    public static boolean isEclipseDirectSingleJUnit() {
+        if (System.getProperty(PROPNAME_BASEDIR) == null
+                && System.getProperty(PROPNAME_SUN_JAVA_CMD).startsWith(ECLIPSE_TESTRUNNER_PREFIX)
+                && System.getProperty(PROPNAME_SUN_JAVA_CMD).contains(" -test ")) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Resolve maven basedir by:
+     *
+     * <ol>
+     * <li>returning the value of the basedir system property,
+     * <li>or - if basedir prop does not exist or is null, return user.dir (current working directory) if eclipse junit
+     * test runner is detected via system properties.
+     * </ol>
+     *
+     * @return
+     * @throws IllegalStateException if all fails
+     */
+    public static String getMavenBasedir() {
+        if (Maven.getMavenBasedir() != null) {
+            return Maven.getMavenBasedir();
+        }
+        if (isEclipseDirectJUnit()) {
+            return System.getProperty("user.dir");
+        }
+        throw new IllegalStateException("maven basedir cannot be determined from system properties!");
+    }
+
+    /**
+     * Some junit tests might require user interaction. You may use this function together with a junit assumption to
+     * prevent running those tests in junit batch runs.
+     *
      * @return true iff being run as a single test (method, not a test unit!)
      */
     public static boolean isSingleTestExecution() {
@@ -97,7 +116,7 @@ public class Surefire extends Maven {
 
     /**
      * Same as {@link #getTempDirForClass(Class)} but wraps the IOException inside a RuntimeException.
-     * 
+     *
      * @param clazz
      * @return the temporary directory
      */
