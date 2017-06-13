@@ -33,7 +33,7 @@ public class ExtendedGnuParser extends GnuParser {
     }
 
     @Override
-    protected void processOption(final String arg, final ListIterator iter) throws ParseException {
+    protected void processOption(final String arg, final ListIterator<String> iter) throws ParseException {
         boolean hasOption = getOptions().hasOption(arg);
 
         if (hasOption || !ignoreUnrecognizedOption) {

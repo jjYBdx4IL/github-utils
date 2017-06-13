@@ -53,21 +53,21 @@ public class Log4JUtils {
      */
     public static void addFileAppender(String filename, String logPattern) {
         // check if log4j is on the class path:
-        Class loggerClass;
+        Class<?> loggerClass;
         try {
             loggerClass = Class.forName(LOGGER_CLASS_NAME);
         } catch (ClassNotFoundException ex) {
             return;
         }
         try {
-            Class patternLayoutClass = Class.forName(PATTERN_LAYOUT_CLASS_NAME);
+            Class<?> patternLayoutClass = Class.forName(PATTERN_LAYOUT_CLASS_NAME);
             //PatternLayout patternLayout = new PatternLayout(logPattern);
             Object patternLayout = patternLayoutClass
                     .getConstructor(String.class)
                     .newInstance(logPattern);
             //FileAppender appender = new FileAppender(patternLayout, logFile.getAbsolutePath(), true);
-            Class fileAppenderClass = Class.forName(FILE_APPENDER_CLASS_NAME);
-            Class layoutClass = Class.forName(LAYOUT_CLASS_NAME);
+            Class<?> fileAppenderClass = Class.forName(FILE_APPENDER_CLASS_NAME);
+            Class<?> layoutClass = Class.forName(LAYOUT_CLASS_NAME);
             Object appender = fileAppenderClass
                     .getConstructor(layoutClass, String.class, boolean.class)
                     .newInstance(patternLayout, filename, true);
@@ -77,10 +77,10 @@ public class Log4JUtils {
             activateOptionsMethod.invoke(appender);
 
             //org.apache.log4j.LogManager.getRootLogger().addAppender(appender);
-            Class logManagerClass = Class.forName(LOG_MGR_CLASS_NAME);
+            Class<?> logManagerClass = Class.forName(LOG_MGR_CLASS_NAME);
             Method getRootLoggerMethod = logManagerClass.getMethod("getRootLogger");
             Object rootLogger = getRootLoggerMethod.invoke(null);
-            Class appenderIface = Class.forName(APPENDER_IFACE_NAME);
+            Class<?> appenderIface = Class.forName(APPENDER_IFACE_NAME);
             Method addAppenderMethod = loggerClass.getMethod("addAppender", appenderIface);
             addAppenderMethod.invoke(rootLogger, appender);
         } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException

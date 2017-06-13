@@ -144,7 +144,7 @@ public class ResourceUtils {
      * @param resourceId the resource path, sensibly a relative one
      * @return the resource
      */
-    public static File getResFileUnchecked(Class resourceClass, String resourceId) {
+    public static File getResFileUnchecked(Class<?> resourceClass, String resourceId) {
         try {
             return new File(resourceClass.getResource(resourceId).toURI());
         } catch (URISyntaxException ex) {
