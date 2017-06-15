@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright © 2014 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils.lang;
 
+//CHECKSTYLE:OFF
 import java.util.Locale;
 
 /**
@@ -53,10 +54,10 @@ public class FloatArrayHistory {
 
     /**
      *
-     * @param start
-     * @param dst
-     * @param dstOffset
-     * @param len
+     * @param start starting offset
+     * @param dst destination array for the copy operation
+     * @param dstOffset offset for writing in destination array
+     * @param len number of elements to copy
      */
     public void copy(int start, float[] dst, int dstOffset, int len) {
         if (start + len > h.length || len < 0 || start < 0) {
@@ -112,7 +113,7 @@ public class FloatArrayHistory {
      * Returns as a {@link String} all elements starting at {@literal start}.
      * Uses default locale.
      *
-     * @param start
+     * @param start the starting index
      * @return the string
      */
     public String toString(int start) {

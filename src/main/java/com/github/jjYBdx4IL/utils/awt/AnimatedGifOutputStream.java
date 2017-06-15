@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright © 2014 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,15 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils.awt;
 
-/*
- * #%L
- * Shared Package
- * %%
- * Copyright (C) 2014 - 2015 Github jjYBdx4IL Projects
- * %%
- * #L%
- */
-
+//CHECKSTYLE:OFF
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.awt.image.IndexColorModel;
@@ -51,22 +43,24 @@ import org.slf4j.LoggerFactory;
 public class AnimatedGifOutputStream implements Closeable {
 
     @SuppressWarnings("unused")
-	   private static final Logger LOG = LoggerFactory.getLogger(AnimatedGifOutputStream.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AnimatedGifOutputStream.class);
 
     /**
-     * Returns an existing child node, or creates and returns a new child node (if the requested node does not
-     * exist).
+     * Returns an existing child node, or creates and returns a new child node
+     * (if the requested node does not exist).
      *
-     * @param rootNode the <tt>IIOMetadataNode</tt> to search for the child node.
-     * @param nodeName the name of the child node.
+     * @param rootNode
+     *            the <tt>IIOMetadataNode</tt> to search for the child node.
+     * @param nodeName
+     *            the name of the child node.
      *
-     * @return the child node, if found or a new node created with the given name.
+     * @return the child node, if found or a new node created with the given
+     *         name.
      */
     private static IIOMetadataNode getNode(IIOMetadataNode rootNode, String nodeName) {
         int nNodes = rootNode.getLength();
         for (int i = 0; i < nNodes; i++) {
-            if (rootNode.item(i).getNodeName().compareToIgnoreCase(nodeName)
-                    == 0) {
+            if (rootNode.item(i).getNodeName().compareToIgnoreCase(nodeName) == 0) {
                 return ((IIOMetadataNode) rootNode.item(i));
             }
         }
@@ -96,16 +90,16 @@ public class AnimatedGifOutputStream implements Closeable {
 
         writer = ImageIO.getImageWritersBySuffix("gif").next();
         param = writer.getDefaultWriteParam();
-//        param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-//        log.info(param.getCompressionType());
+        // param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+        // log.info(param.getCompressionType());
 
         ImageTypeSpecifier imageTypeSpecifier = ImageTypeSpecifier.createFromBufferedImageType(sampleImage.getType());
 
         if (sampleImage.getColorModel() instanceof IndexColorModel) {
             IndexColorModel icm = (IndexColorModel) sampleImage.getColorModel();
             if (icm.getNumColorComponents() != 3) {
-                throw new IllegalArgumentException(AnimatedGifOutputStream.class.getSimpleName()
-                        + " requires 3 color components");
+                throw new IllegalArgumentException(
+                        AnimatedGifOutputStream.class.getSimpleName() + " requires 3 color components");
             }
             int mapSize = icm.getMapSize();
             byte[] r = new byte[mapSize];
@@ -123,38 +117,31 @@ public class AnimatedGifOutputStream implements Closeable {
         }
 
         imageMetaData = writer.getDefaultImageMetadata(imageTypeSpecifier, param);
-//        imageMetaData = writer.getDefaultImageMetadata(
-//                ImageTypeSpecifier.createFromBufferedImageType(sampleImage.getType()), param);
-//
-//
-//        sampleImage.
-//        ImageTypeSpecifier.createIndexed(redLUT, greenLUT, blueLUT, alphaLUT, timeBetweenFramesMillis, timeBetweenFramesMillis);
+        // imageMetaData = writer.getDefaultImageMetadata(
+        // ImageTypeSpecifier.createFromBufferedImageType(sampleImage.getType()),
+        // param);
+        //
+        //
+        // sampleImage.
+        // ImageTypeSpecifier.createIndexed(redLUT, greenLUT, blueLUT, alphaLUT,
+        // timeBetweenFramesMillis, timeBetweenFramesMillis);
 
         String metaFormatName = imageMetaData.getNativeMetadataFormatName();
 
         IIOMetadataNode root = (IIOMetadataNode) imageMetaData.getAsTree(metaFormatName);
 
-        IIOMetadataNode graphicsControlExtensionNode = getNode(
-                root,
-                "GraphicControlExtension");
+        IIOMetadataNode graphicsControlExtensionNode = getNode(root, "GraphicControlExtension");
 
         graphicsControlExtensionNode.setAttribute("disposalMethod", "none");
         graphicsControlExtensionNode.setAttribute("userInputFlag", "FALSE");
-        graphicsControlExtensionNode.setAttribute(
-                "transparentColorFlag",
-                "FALSE");
-        graphicsControlExtensionNode.setAttribute("delayTime",
-                Integer.toString(timeBetweenFramesMillis / 10));
-        graphicsControlExtensionNode.setAttribute(
-                "transparentColorIndex",
-                "0");
+        graphicsControlExtensionNode.setAttribute("transparentColorFlag", "FALSE");
+        graphicsControlExtensionNode.setAttribute("delayTime", Integer.toString(timeBetweenFramesMillis / 10));
+        graphicsControlExtensionNode.setAttribute("transparentColorIndex", "0");
 
         IIOMetadataNode commentsNode = getNode(root, "CommentExtensions");
         commentsNode.setAttribute("CommentExtension", "No comment.");
 
-        IIOMetadataNode appEntensionsNode = getNode(
-                root,
-                "ApplicationExtensions");
+        IIOMetadataNode appEntensionsNode = getNode(root, "ApplicationExtensions");
 
         IIOMetadataNode child = new IIOMetadataNode("ApplicationExtension");
 
@@ -163,7 +150,7 @@ public class AnimatedGifOutputStream implements Closeable {
 
         int loop = loopContinuously ? 0 : 1;
 
-        child.setUserObject(new byte[]{0x1, (byte) (loop & 0xFF), (byte) ((loop >> 8) & 0xFF)});
+        child.setUserObject(new byte[] { 0x1, (byte) (loop & 0xFF), (byte) ((loop >> 8) & 0xFF) });
         appEntensionsNode.appendChild(child);
 
         imageMetaData.setFromTree(metaFormatName, root);
@@ -179,12 +166,7 @@ public class AnimatedGifOutputStream implements Closeable {
             init(img);
         }
 
-        writer.writeToSequence(
-                new IIOImage(
-                        img,
-                        null,
-                        imageMetaData),
-                param);
+        writer.writeToSequence(new IIOImage(img, null, imageMetaData), param);
     }
 
     @Override

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright © 2014 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils.parser.nagios;
 
+//CHECKSTYLE:OFF
 import com.github.jjYBdx4IL.utils.TimeUtils;
 
 import java.io.IOException;
@@ -37,9 +38,10 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 /**
- * Nagios status.cgi parser.
+ * Nagios status cgi parser.
+ * 
  * <p>
- * Parses output from  <code>http://you.nagios.host.com/nagios3/cgi-bin/status.cgi?host=all&style=detail<code>
+ * Parses output from http://you.nagios.host.com/nagios3/cgi-bin/status.cgi?host=all&amp;style=detail.</p>
  *
  * @author Github jjYBdx4IL Projects
  */

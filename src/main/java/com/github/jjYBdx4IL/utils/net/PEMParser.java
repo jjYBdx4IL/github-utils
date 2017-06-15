@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright © 2014 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils.net;
 
+//CHECKSTYLE:OFF
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -37,10 +38,10 @@ public class PEMParser extends org.bouncycastle.openssl.PEMParser {
     /**
      * Strip PEM comments.
      *
-     * @param reader
+     * @param reader the input reader
      * @return a {@link java.io.Reader} that is backed by a byte array
-     * @throws UnsupportedEncodingException
-     * @throws IOException
+     * @throws UnsupportedEncodingException on bad encoding
+     * @throws IOException on read failure
      */
     public static Reader stripComments(Reader reader) throws UnsupportedEncodingException, IOException {
         BufferedReader br = new BufferedReader(reader);
@@ -78,11 +79,10 @@ public class PEMParser extends org.bouncycastle.openssl.PEMParser {
     }
 
     /**
-     * Strips PEM comments from the input but is otherwise identical to
-     * {@link org.bouncycastle.openssl.PEMReader#PEMReader(Reader)}.
+     * Strips PEM comments from the input.
      *
-     * @param reader
-     * @throws IOException
+     * @param reader the input reader
+     * @throws IOException on read failure
      */
     public PEMParser(Reader reader) throws IOException {
         super(stripComments(reader));

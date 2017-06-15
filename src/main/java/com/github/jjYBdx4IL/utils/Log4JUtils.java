@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright © 2014 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,7 +38,7 @@ public class Log4JUtils {
      * Convenience method for {@link #addFileAppender(String,String)}.
      * Uses {@link #DEFAULT_LOG_PATTERN}.
      * 
-     * @param filename 
+     * @param filename the file for appending log messages
      */
     public static void addFileAppender(String filename) {
         addFileAppender(filename, DEFAULT_LOG_PATTERN);
@@ -48,8 +48,8 @@ public class Log4JUtils {
      * Beware! This method adds the appender to the root looger. If there are other logger elements specified in your
      * log4j configuration (file), you need to set their additivity attribute to true.
      *
-     * @param filename
-     * @param logPattern
+     * @param filename the file for appending log messages
+     * @param logPattern the log line pattern to use
      */
     public static void addFileAppender(String filename, String logPattern) {
         // check if log4j is on the class path:

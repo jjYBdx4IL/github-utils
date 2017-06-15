@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright © 2014 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils;
 
+//CHECKSTYLE:OFF
 import com.github.jjYBdx4IL.utils.env.Env;
 import java.io.File;
 import java.util.Map;
@@ -28,7 +29,9 @@ import org.slf4j.LoggerFactory;
  * A simple key-value String store using mapdb for more reliable persistency.
  * 
  * @author jjYBdx4IL
+ * @deprecated don't use mapdb, use a mature embedded database like h2 instead
  */
+@Deprecated
 public class SimpleAppConfig implements AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(SimpleAppConfig.class);
@@ -64,7 +67,7 @@ public class SimpleAppConfig implements AutoCloseable {
 
     /**
      * 
-     * @param key
+     * @param key the key
      * @param value a null value will remove the config property.
      */
     public void put(String key, String value) {
@@ -83,7 +86,7 @@ public class SimpleAppConfig implements AutoCloseable {
      * Because we commit the configuration after every update/put, this method allows for more efficient batch updates
      * because it only commits changes to disk once.
      * 
-     * @param map
+     * @param map the config map to add/store
      */
     public void putAll(Map<String, String> map) {
         for (Map.Entry<String, String> e : map.entrySet()) {
@@ -114,6 +117,8 @@ public class SimpleAppConfig implements AutoCloseable {
     
     /**
      * for testing only.
+     * 
+     * @param forceDir the config directory to use
      */
     protected static void setForceDir(File forceDir) {
         LOG.debug("forcing config dir location to " + forceDir.getAbsolutePath());

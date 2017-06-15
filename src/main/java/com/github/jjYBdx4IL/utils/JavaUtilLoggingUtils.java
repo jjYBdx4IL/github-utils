@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright © 2014 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils;
 
+//CHECKSTYLE:OFF
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -32,7 +33,7 @@ public class JavaUtilLoggingUtils {
     /**
      *
      * @param loggerPackage "" for root logger
-     * @param level
+     * @param level the logging level to set
      */
     public static void setConsoleHandlerLevel(String loggerPackage, Level level) {
         Logger topLogger = Logger.getLogger(loggerPackage);
@@ -55,6 +56,8 @@ public class JavaUtilLoggingUtils {
     /**
      * Installs a separate {@link java.util.logging.ConsoleHandler} for the logger package
      * "sun.net.www.protocol.http" and disconnects logging from parent handlers to avoid duplicated output.
+     * 
+     * @param level the logging level to set
      */
     public static void setJavaNetURLConsoleLoggingLevel(Level level) {
         Logger logger = Logger.getLogger(JAVA_NET_URL_LOG_PKG);

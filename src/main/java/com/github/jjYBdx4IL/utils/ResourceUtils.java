@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright © 2014 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils;
 
+//CHECKSTYLE:OFF
 import com.sun.jna.Platform;
 
 import java.io.File;
@@ -96,7 +97,7 @@ public class ResourceUtils {
      *
      * @param resourceId an absolute resourceId (ie. starts with "/")
      * @return the extracted file
-     * @throws java.io.IOException
+     * @throws java.io.IOException if there was an I/O problem
      */
     public static File extractResource(String resourceId) throws IOException {
         if (resourceId == null || resourceId.isEmpty()) {
@@ -141,6 +142,7 @@ public class ResourceUtils {
      * extracted resources, not for resource packed inside jars. The function will throw only unchecked
      * exceptions and is mainly useful for static initializers and test units.
      *
+     * @param resourceClass the class
      * @param resourceId the resource path, sensibly a relative one
      * @return the resource
      */

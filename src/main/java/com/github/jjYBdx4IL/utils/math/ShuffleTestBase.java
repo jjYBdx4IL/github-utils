@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright © 2014 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,16 +15,13 @@
  */
 package com.github.jjYBdx4IL.utils.math;
 
-import com.github.jjYBdx4IL.utils.math.Shuffle;
-import com.github.jjYBdx4IL.utils.math.Shuffle;
-
-import java.util.Arrays;
-import java.util.Random;
-
-import static org.junit.Assert.*;
+//CHECKSTYLE:OFF
 import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+import java.util.Random;
 
 /**
  *
@@ -125,6 +122,12 @@ public class ShuffleTestBase {
         }
     }
 
+    private void assertEquals(boolean result, boolean test) {
+        if (result != test) {
+            throw new RuntimeException("assert failed");
+        }
+    }
+
     protected void testUntilTrue(int[] expectChange) {
         testUntil(true, expectChange);
     }
@@ -159,6 +162,12 @@ public class ShuffleTestBase {
         }
         for (int i = 0; i < flag.length; i++) {
             assertEquals(Arrays.toString(ba), 1, flag[i]);
+        }
+    }
+
+    private static void assertEquals(String string, int i, int j) {
+        if (i != j) {
+            throw new RuntimeException(string);
         }
     }
 

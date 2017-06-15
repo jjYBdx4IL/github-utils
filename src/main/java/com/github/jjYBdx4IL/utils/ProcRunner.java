@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright © 2014 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils;
 
+//CHECKSTYLE:OFF
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -64,8 +65,9 @@ public class ProcRunner {
 
     /**
      * No timeout.
+     * 
      * @return exit value of the process
-     * @throws IOException 
+     * @throws IOException if there was an I/O problem
      */
     public int run() throws IOException {
         return run(DEFAULT_TIMEOUT);
@@ -73,9 +75,9 @@ public class ProcRunner {
 
     /**
      * 
-     * @param timeout in millis
+     * @param timeout in milliseconds
      * @return exit value of the process
-     * @throws IOException
+     * @throws IOException if there was an I/O problem
      */
     public int run(long timeout) throws IOException {
         final Process p = mProcessBuilder.start();

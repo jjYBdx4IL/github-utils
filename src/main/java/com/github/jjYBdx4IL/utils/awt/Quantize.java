@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright © 2014 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,19 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils.awt;
 
-/*
- * #%L
- * Shared Package
- * %%
- * Copyright (C) 2014 - 2015 Github jjYBdx4IL Projects
- * %%
- * #L%
- */
-
-/**
- *
- * @author http://stackoverflow.com/questions/21472245/color-quantization-with-n-out-of-m-predefined-colors
- */
+//CHECKSTYLE:OFF
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.PixelGrabber;
@@ -40,6 +28,11 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+/**
+*
+* @author http://stackoverflow.com/questions/21472245/color-quantization-with-n-out-of-m-predefined-colors
+* @author jjYBdx4IL update javadoc 
+*/
 public class Quantize {
 
 public static class RGBTriple {
@@ -213,7 +206,11 @@ public static int[] getPixels(Image image) throws IOException {
 }
 
 /**
- * Returns the color distance between color1 and color2
+ * Returns the color distance between color1 and color2.
+ * 
+ * @param color1 first color
+ * @param color2 second color
+ * @return the color distance
  */
 public static float getPixelDistance(PaletteColor color1, PaletteColor color2){
     int c1 = color1.color;
@@ -234,6 +231,10 @@ public static double getPixelDistance(int r1, int g1, int b1, int r2, int g2, in
 /**
  * Fills the given fillColors palette with the nearest colors from the given colors palette until
  * it has the given max_cols size.
+ * 
+ * @param fillColors the colors to fill
+ * @param colors the colors to use for filling
+ * @param max_cols the target size for fillColors
  */
 public static void fillPalette(List<PaletteColor> fillColors, List<PaletteColor> colors, int max_cols){
     while (fillColors.size() < max_cols) {
@@ -300,6 +301,10 @@ public static void reducePaletteByAverageDistance(List<PaletteColor> colors, int
  * Reduces the given color palette until it has the given max_cols size.
  * The colors that are closest in distance to other colors in the palette
  * get removed first.
+ * 
+ * @param colors the color palette
+ * @param max_cols the maximum number of colors
+ * @param reductionStrategy the reduction strategy
  */
 public static void reducePalette(List<PaletteColor> colors, int max_cols, ReductionStrategy reductionStrategy){
     if (reductionStrategy == ReductionStrategy.AVERAGE_DISTANCE) {
@@ -378,6 +383,10 @@ public static void reducePalette(List<PaletteColor> colors, int max_cols, Reduct
  * selecting the colors with the nearest distance to the given pixels.
  * This method also stores the indices of the corresponding pixels inside the
  * returned PaletteColor instances.
+ * 
+ * @return the initial color palette
+ * @param pixels the pixels to use
+ * @param palette the palette to use 
  */
 public static List<PaletteColor> createInitialPalette(int pixels[], int[] palette){
     Map<Integer, Integer> used = new HashMap<>();
@@ -420,6 +429,9 @@ public static List<PaletteColor> createInitialPalette(int pixels[], int[] palett
 
 /**
  * Creates a simple random color palette
+ * 
+ * @param num_colors number of random colors to insert
+ * @return the palette
  */
 public static int[] createRandomColorPalette(int num_colors){
     Random random = new Random(101);
@@ -449,6 +461,9 @@ public static int[] createGrayScalePalette(int count){
 
 /**
  * Returns a grayscale palette based on the given shades of gray
+ * 
+ * @param grays the sahdes of gray
+ * @return the grayscale palette
  */
 public static int[] createGrayScalePalette(float[] grays){
     int[] result = new int[grays.length];

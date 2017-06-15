@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright © 2014 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils.vmmgmt;
 
+//CHECKSTYLE:OFF
 import com.sun.jna.Pointer;
 
 import java.io.File;
@@ -82,7 +83,7 @@ public class VMInstanceProvider implements AutoCloseable {
      * previously running VM having the same name and being executed in the same domain, will get destroyed
      * first.
      *
-     * @param os
+     * @param os the OS to install
      * @return the vm data
      */
     public VMData createVM(OS os) throws VMMgmtException {
@@ -93,7 +94,7 @@ public class VMInstanceProvider implements AutoCloseable {
      * Prepare a running VM in a defined, clean state. Any previously running VM having the same name and
      * being executed in the same domain, will get destroyed first.
      *
-     * @param os
+     * @param os the OS to install
      * @param vmName identifies the VM instance. There cannot be two VMs running with the same name in the
      * same domain at one time.
      * @return the vm data

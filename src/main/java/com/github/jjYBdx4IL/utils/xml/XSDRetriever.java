@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright © 2014 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,14 +15,14 @@
  */
 package com.github.jjYBdx4IL.utils.xml;
 
-/*
- * #%L
- * Shared Package
- * %%
- * Copyright (C) 2014 - 2015 Github jjYBdx4IL Projects
- * %%
- * #L%
- */
+//CHECKSTYLE:OFF
+import org.apache.commons.io.IOUtils;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,15 +36,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
+ * TODO.
  *
  * @author Github jjYBdx4IL Projects
  */
@@ -52,6 +45,14 @@ public class XSDRetriever {
 
     private static final Logger LOG = LoggerFactory.getLogger(XSDRetriever.class);
 
+    /**
+     * TODO.
+     * 
+     * @param startRelFile TODO
+     * @param parentUrl TODO
+     * @param outDir TODO
+     * @throws IOException TODO
+     */
     public static void retrieve(String startRelFile, String parentUrl, String outDir) throws IOException {
 
         List<String> relFiles = new ArrayList<>();
@@ -102,6 +103,12 @@ public class XSDRetriever {
         }
     }
 
+    /**
+     * TODO.
+     * @param xsdStream TODO.
+     * @return TODO.
+     * @throws DocumentException TODO.
+     */
     @SuppressWarnings("unchecked")
     public static List<String> getIncludeImportSchemaLocations(InputStream xsdStream) throws DocumentException {
         List<String> list = new ArrayList<>();
@@ -120,6 +127,11 @@ public class XSDRetriever {
         return list;
     }
 
+    /**
+     *  TODO.
+     * @param args TODO.
+     * @throws IOException TODO.
+     */
     public static void main(String[] args) throws IOException {
         String outDir = args[0];
         String parentUrl = args[1];

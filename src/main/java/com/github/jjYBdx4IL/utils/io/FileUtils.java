@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright © 2014 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,14 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils.io;
 
-/*
- * #%L
- * Shared Package
- * %%
- * Copyright (C) 2014 Github jjYBdx4IL Projects
- * %%
- * #L%
- */
+//CHECKSTYLE:OFF
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -55,7 +48,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
      * <li><a
      * href="https://issues.apache.org/jira/browse/IO-373">https://issues.apache.org/jira/browse/IO-373</a></ul>
      *
-     * @param size
+     * @param size the size in bytes
      * @param maxChars maximum length of digit part, ie. '1.2'
      * @return rounded byte size as {@link java.lang.String}
      */
@@ -88,8 +81,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * See {@link #byteCountToDisplaySize(BigInteger,int)}.
      *
-     * @param size
-     * @param maxChars
+     * @param size the size in bytes
+     * @param maxChars maximum length of digit part, ie. '1.2'
      * @return formatted size suitable for display
      */
     public static String byteCountToDisplaySize(long size, int maxChars) {

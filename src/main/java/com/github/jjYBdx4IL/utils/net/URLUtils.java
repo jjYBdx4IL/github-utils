@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright © 2014 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils.net;
 
+//CHECKSTYLE:OFF
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -50,41 +51,42 @@ public class URLUtils {
     private static final Pattern URI_FINDER_PATTERN = Pattern.compile("\\(*https?://[" + VALID_CHARS + VALID_NON_TERMINAL + "]*[" + VALID_CHARS + "]", Pattern.CASE_INSENSITIVE);
 
     /**
-     * <p>
      * Finds all "URL"s in the given _rawText, wraps them in HTML link tags and returns the result (with the
      * rest of the text html encoded).
-     * </p>
+     * 
      * <p>
      * We employ the procedure described at:
      * <a
      * href="http://www.codinghorror.com/blog/2008/10/the-problem-with-urls.html">http://www.codinghorror.com/blog/2008/10/the-problem-with-urls.html</a>
-     * which is a <b>must-read</b>.
-     * </p>
+     * which is a <b>must-read</b>.</p>
+     * 
+     * <p>
      * Basically, we allow any number of left parenthesis (which will get stripped away) followed by http://
      * or https://. Then any number of permitted URL characters (based on <a
      * href="http://www.ietf.org/rfc/rfc1738.txt">http://www.ietf.org/rfc/rfc1738.txt</a>) followed by a
      * single character of that set (basically, those minus typical punctuation). We remove all sets of
-     * matching left & right parentheses which surround the URL.
-     * </p>
+     * matching left &amp; right parentheses which surround the URL.</p>
+     * 
      * <p>
      * This method *must* be called from a tag/component which will NOT end up escaping the output. For
-     * example:
-     * <PRE>
+     * example:</p>
+     * 
+     * <pre>{@code
      * <h:outputText ... escape="false" value="#{core:hyperlinkText(textThatMayHaveURLs, '_blank')}"/>
-     * </pre>
-     * </p>
+     * }</pre>
+     * 
      * <p>
      * Reason: we are adding <code>&lt;a href="..."&gt;</code> tags to the output *and* encoding the rest of
      * the string. So, encoding the outupt will result in double-encoding data which was already encoded - and
-     * encoding the <code>a href</code> (which will render it useless).
-     * </p>
+     * encoding the <code>a href</code> (which will render it useless).</p>
+     * 
      * <p>
-     * <a href="http://stackoverflow.com/a/9602832/1050755">Source @ stackoverflow.com</a>
-     * <p>
+     * <a href="http://stackoverflow.com/a/9602832/1050755">Source @ stackoverflow.com</a></p>
      *
      * @param _rawText - if <code>null</code>, returns <code>""</code> (empty string).
      * @param _target - if not <code>null</code> or <code>""</code>, adds a target attributed to the generated
      * link, using _target as the attribute value.
+     * @return the modified input text
      */
     public static final String hyperlinkText(final String _rawText, final String _target) {
 
@@ -161,7 +163,7 @@ public class URLUtils {
      * Based on {@link #hyperlinkText(java.lang.String, java.lang.String)} and adjusted to return a list of
      * all detected URLs (http and https).
      *
-     * @param _rawText
+     * @param _rawText the text to parse
      * @return list of detected URLs
      */
     public static final List<String> hyperlinkUrls(final String _rawText) {
@@ -213,10 +215,10 @@ public class URLUtils {
      *
      * Kept here for backwards compatbility. There are likely better methods available in apache http packages.
      *
-     * @param url
-     * @param charset
-     * @return
-     * @throws URISyntaxException
+     * @param url the url string to decode
+     * @param charset the charset to use
+     * @return the map of url parameters
+     * @throws URISyntaxException thrown if the url is not properly formatted
      */
     public static Map<String, String> readParamsIntoMap(String url, String charset) throws URISyntaxException {
         Map<String, String> params = new HashMap<>();
@@ -233,9 +235,9 @@ public class URLUtils {
     /**
      * Kept here for backwards compatbility. There are likely better methods available in apache http packages.
      * 
-     * @param url
-     * @return
-     * @throws UnsupportedEncodingException
+     * @param url the url string to decode
+     * @return the query params map
+     * @throws UnsupportedEncodingException if UTF-8 is not supported on your platform
      */
     public static Map<String, List<String>> getQueryParams(String url) throws UnsupportedEncodingException {
         Map<String, List<String>> params = new HashMap<>();

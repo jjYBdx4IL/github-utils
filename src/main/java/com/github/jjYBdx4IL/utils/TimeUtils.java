@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright © 2014 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils;
 
+//CHECKSTYLE:OFF
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,11 +30,12 @@ import java.util.regex.Pattern;
  */
 public class TimeUtils {
 
-	public final static String TZ = "UTC";
-	public final static String ISO8601_FMT = "yyyy-MM-dd'T'HH:mm'Z'";
-	public final static String ISO8601_SECS_FMT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-    public static final Pattern DURATION_PATTERN = Pattern.compile("(?:(\\d+)w)?\\s*(?:(\\d+)d)?\\s*(?:(\\d+)h)?\\s*(?:(\\d+)m)?\\s*(?:(\\d+)s)?", Pattern.CASE_INSENSITIVE);
-	
+    public final static String TZ = "UTC";
+    public final static String ISO8601_FMT = "yyyy-MM-dd'T'HH:mm'Z'";
+    public final static String ISO8601_SECS_FMT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    public static final Pattern DURATION_PATTERN = Pattern.compile(
+            "(?:(\\d+)w)?\\s*(?:(\\d+)d)?\\s*(?:(\\d+)h)?\\s*(?:(\\d+)m)?\\s*(?:(\\d+)s)?", Pattern.CASE_INSENSITIVE);
+
     public static String toISO8601(Date date) {
         final TimeZone tz = TimeZone.getTimeZone(TZ);
         final DateFormat df = new SimpleDateFormat(ISO8601_FMT);
@@ -47,14 +49,16 @@ public class TimeUtils {
         df.setTimeZone(tz);
         return df.format(date);
     }
-    
+
     /**
-     * Parse a date formatted as ISO8601. This function assumes the date contains seconds, if not it falls
-     * back to minute precision.
+     * Parse a date formatted as ISO8601. This function assumes the date
+     * contains seconds, if not it falls back to minute precision.
      * 
-     * @param input the ISO8601 formatted date
+     * @param input
+     *            the ISO8601 formatted date
      * @return the Date object
      * @throws ParseException
+     *             if the input string has a wrong format
      */
     public static Date parseISO8601(String input) throws ParseException {
         final TimeZone tz = TimeZone.getTimeZone(TZ);
@@ -62,7 +66,7 @@ public class TimeUtils {
             final DateFormat df = new SimpleDateFormat(ISO8601_SECS_FMT);
             df.setTimeZone(tz);
             df.setLenient(false);
-        	return df.parse(input);
+            return df.parse(input);
         } catch (ParseException ex) {
             final DateFormat df = new SimpleDateFormat(ISO8601_FMT);
             df.setTimeZone(tz);

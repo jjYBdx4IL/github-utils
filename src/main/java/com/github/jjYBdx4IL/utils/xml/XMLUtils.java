@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright © 2014 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,10 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils.xml;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
+//CHECKSTYLE:OFF
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -29,13 +26,20 @@ import org.dom4j.VisitorSupport;
 import org.dom4j.io.SAXReader;
 import org.junit.Assert;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+/**
+ * @author jjYBdx4IL
+ */
 public class XMLUtils {
 
     /**
      * Dirty XML comparison. See {@link #strip(String)}.
      *
-     * @param xml1
-     * @param xml2
+     * @param xml1 first xml
+     * @param xml2 second xml to compare the first one with
      */
     public static void assertEquals(String xml1, String xml2) {
         Assert.assertEquals(strip(xml1), strip(xml2));
@@ -49,7 +53,7 @@ public class XMLUtils {
      * areas of testing. 
      *
      * @param xml UTF-8 encoding is assumed
-     * @return
+     * @return the trimmed xml
      */
     public static String strip(String xml) {
         try {
@@ -80,8 +84,8 @@ public class XMLUtils {
 
     public static boolean hasNonTextChilds(Element element) {
         for (Object node : element.content()) {
-            Node e = (Node) node;
-            if (e.getNodeType() != Node.TEXT_NODE) {
+            Node e1 = (Node) node;
+            if (e1.getNodeType() != Node.TEXT_NODE) {
                 return true;
             }
         }
@@ -91,11 +95,11 @@ public class XMLUtils {
 
     public static boolean hasTextChildsWithNonWhitespace(Element element) {
         for (Object node : element.content()) {
-            Node e = (Node) node;
-            if (e.getNodeType() != Node.TEXT_NODE) {
+            Node e1 = (Node) node;
+            if (e1.getNodeType() != Node.TEXT_NODE) {
                 continue;
             }
-            Text textNode = (Text) e;
+            Text textNode = (Text) e1;
             if (!textNode.getText().trim().isEmpty()) {
                 return true;
             }

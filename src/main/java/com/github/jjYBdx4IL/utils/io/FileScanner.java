@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright © 2014 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils.io;
 
+//CHECKSTYLE:OFF
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ import org.slf4j.LoggerFactory;
  */
 public class FileScanner extends DirectoryWalker<File> {
 
-    private static final Logger log = LoggerFactory.getLogger(FileScanner.class);
+    private static final Logger lOG = LoggerFactory.getLogger(FileScanner.class);
     private final boolean relativize;
     private final Pattern regex;
     private String prefix;
@@ -71,7 +72,7 @@ public class FileScanner extends DirectoryWalker<File> {
     }
 
     public List<File> scanFiles(File startDirectory) throws IOException {
-        log.debug("startDirectory: " + startDirectory.getAbsolutePath());
+        lOG.debug("startDirectory: " + startDirectory.getAbsolutePath());
         ArrayList<File> dirs = new ArrayList<>();
         prefix = startDirectory.getAbsolutePath();
         if (!prefix.endsWith(File.separator)) {
@@ -85,10 +86,10 @@ public class FileScanner extends DirectoryWalker<File> {
      * Returns a list of files.
      * @param startDirectory the root directory for the search
      * @return the list of matching files
-     * @throws IOException
+     * @throws IOException if there is a problem with I/O
      */
     public List<File> getFiles(File startDirectory) throws IOException {
-        log.debug("startDirectory: " + startDirectory.getAbsolutePath());
+        lOG.debug("startDirectory: " + startDirectory.getAbsolutePath());
         ArrayList<File> dirs = new ArrayList<>();
         prefix = startDirectory.getAbsolutePath();
         if (!prefix.endsWith(File.separator)) {
@@ -101,8 +102,8 @@ public class FileScanner extends DirectoryWalker<File> {
     @Override
     protected void handleFile(File file, int depth, Collection<File> results) throws IOException {
         String absPath = file.getAbsolutePath();
-        if (log.isTraceEnabled()) {
-            log.trace("handleFile: " + absPath);
+        if (lOG.isTraceEnabled()) {
+            lOG.trace("handleFile: " + absPath);
         }
         if (!absPath.startsWith(prefix)) {
             throw new IOException(String.format("scanned file %s is not below scanner root directory %s",
@@ -121,7 +122,9 @@ public class FileScanner extends DirectoryWalker<File> {
 
     /**
      * Overwrite this method to process files on the fly.
-     * @param file
+     * 
+     * @param file the file
+     * @throws IOException if the is an I/O problem
      */
     public void handleFile(File file) throws IOException {
     }

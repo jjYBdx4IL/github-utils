@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright © 2014 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils.awt;
 
+//CHECKSTYLE:OFF
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -49,9 +50,9 @@ public class ImageUtils {
     /**
      * Works only as intended when used with an ordered palette, which implies a monochromaticity.
      *
-     * @param pal
-     * @param pixel
-     * @return
+     * @param pal the input palette
+     * @param pixel the pixel
+     * @return the closest color from the palette
      */
     public static int findClosestBinary(int[] pal, int pixel) {
         int imin = 0, imax = pal.length - 1;

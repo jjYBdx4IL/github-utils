@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright © 2014 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,15 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils.security;
 
-/*
- * #%L
- * Shared Package
- * %%
- * Copyright (C) 2014 Github jjYBdx4IL Projects
- * %%
- * #L%
- */
-
+//CHECKSTYLE:OFF
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
@@ -33,33 +25,44 @@ import javax.crypto.spec.PBEKeySpec;
 import org.apache.commons.codec.binary.Base64;
 
 /**
- * <a href="http://stackoverflow.com/questions/2860943/suggestions-for-library-to-hash-passwords-in-java">Source</a>
+ * <a href=
+ * "http://stackoverflow.com/questions/2860943/suggestions-for-library-to-hash-passwords-in-java">Source</a>
  */
 public class Password {
     // The higher the number of iterations the more
     // expensive computing the hash is for us
     // and also for a brute force attack.
-    private static final int iterations = 10*1024;
+    private static final int iterations = 10 * 1024;
     private static final int saltLen = 32;
     private static final int desiredKeyLen = 256;
 
-    /** Computes a salted PBKDF2 hash of given plaintext password
-        suitable for storing in a database.
-        Empty passwords are not supported. 
-     * @throws RuntimeException */
+    /**
+     * Computes a salted PBKDF2 hash of given plaintext password suitable for
+     * storing in a database. Empty passwords are not supported.
+     * 
+     * @throws RuntimeException if there is something wrong with the hash/crypto algorithms
+     * @param password the password
+     * @return the salted hash
+     */
     public static String getSaltedHash(String password) {
         byte[] salt;
         try {
             salt = SecureRandom.getInstance("SHA1PRNG").generateSeed(saltLen);
             // store the salt with the password
             return Base64.encodeBase64String(salt) + "$" + hash(password, salt);
-        } catch (NoSuchAlgorithmException|InvalidKeySpecException e) {
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
         }
     }
 
-    /** Checks whether given plaintext password corresponds
-        to a stored salted hash of the password. */
+    /**
+     * Checks whether given plaintext password corresponds to a stored salted
+     * hash of the password.
+     * 
+     * @param password the plaintext password
+     * @param stored salted hash of the password
+     * @return true iff the password matches
+     */
     public static boolean check(String password, String stored) {
         String[] saltAndPass = stored.split("\\$");
         if (saltAndPass.length != 2)
@@ -79,9 +82,7 @@ public class Password {
         if (password == null || password.length() == 0)
             throw new IllegalArgumentException("Empty passwords are not supported.");
         SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        SecretKey key = f.generateSecret(new PBEKeySpec(
-            password.toCharArray(), salt, iterations, desiredKeyLen)
-        );
+        SecretKey key = f.generateSecret(new PBEKeySpec(password.toCharArray(), salt, iterations, desiredKeyLen));
         return Base64.encodeBase64String(key.getEncoded());
     }
 }

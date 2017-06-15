@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016 jjYBdx4IL (https://github.com/jjYBdx4IL)
+ * Copyright © 2014 jjYBdx4IL (https://github.com/jjYBdx4IL)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,7 @@
  */
 package com.github.jjYBdx4IL.utils.awt;
 
+//CHECKSTYLE:OFF
 import java.awt.Container;
 import java.awt.Dialog;
 import java.awt.GraphicsDevice;
@@ -54,11 +55,10 @@ public class AWTUtils {
     /**
      *
      * @param screen -1 for all screens
-     * @param title
-     * @param message
-     * @param position
-     * @param timeoutMS
-     * @param closeableByUser
+     * @param message the notification's message content
+     * @param position the notification's position
+     * @param timeoutMS the notification's duration
+     * @param closeableByUser whether the notification should be closeable by the user
      */
     public static void showPopupNotification(final int screen, final String message,
             final int position, final int timeoutMS, final boolean closeableByUser) {
@@ -141,8 +141,8 @@ public class AWTUtils {
     /**
      * Set JFrame location relative to a specific screen in a multi-screen setup.
      *
-     * @param screen
-     * @param frame
+     * @param screen the target screen
+     * @param frame the window to position
      * @param x coordinate relative to the given screen
      * @param y coordinate relative to the given screen
      */
@@ -159,8 +159,8 @@ public class AWTUtils {
     /**
      * Center JFrame position on a specific screen in a multi-screen setup.
      *
-     * @param screen
-     * @param frame
+     * @param screen the screen to center the window on
+     * @param frame the window to center
      */
     public static void centerOnScreen(int screen, JFrame frame) {
         final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -176,7 +176,7 @@ public class AWTUtils {
     /**
      * Center JFrame position on the screen where the mouse is located.
      *
-     * @param window
+     * @param window the window to center
      */
     public static void centerOnMouseScreen(Window window) {
         GraphicsDevice gd = MouseInfo.getPointerInfo().getDevice();
@@ -187,8 +187,8 @@ public class AWTUtils {
 
     /**
      *
-     * @param title
-     * @param question
+     * @param title the dialog title
+     * @param question the confirmation dialog's question
      * @return true iff user pressed the yes button
      */
     public static boolean askForConfirmationOnMouseScreen(String title, String question) {
@@ -214,8 +214,8 @@ public class AWTUtils {
     /**
      * Display some informational message.
      *
-     * @param title
-     * @param text
+     * @param title the dialog title
+     * @param text the dialog text
      */
     public static void showInfoDialogOnMouseScreen(String title, String text) {
         JOptionPane jOptionPane = new JOptionPane(text, JOptionPane.PLAIN_MESSAGE);
@@ -261,6 +261,8 @@ public class AWTUtils {
     
     /**
      * Used for testing stuff interactively.
+     * 
+     * @param frame the JFrame
      */
     public static void showFrameAndWaitForCloseByUser(final JFrame frame) {
         frame.pack();
