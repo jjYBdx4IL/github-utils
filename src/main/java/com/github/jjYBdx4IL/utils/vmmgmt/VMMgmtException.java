@@ -20,6 +20,7 @@ package com.github.jjYBdx4IL.utils.vmmgmt;
  *
  * @author jjYBdx4IL
  */
+@SuppressWarnings("serial")
 public class VMMgmtException extends RuntimeException {
 
     VMMgmtException(Throwable ex) {

@@ -18,8 +18,6 @@ package com.github.jjYBdx4IL.utils.env;
 //CHECKSTYLE:OFF
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -45,6 +43,7 @@ public class Surefire extends Maven {
      *
      * @return true iff being run as direct junit test in Eclipse without maven
      */
+    @SuppressWarnings("deprecation")
     public static boolean isEclipseDirectJUnit() {
         if (Maven.getMavenBasedir() == null
                 && System.getProperty(PROPNAME_SUN_JAVA_CMD).startsWith(ECLIPSE_TESTRUNNER_PREFIX)) {
@@ -79,6 +78,7 @@ public class Surefire extends Maven {
      * @return the maven base directory
      * @throws IllegalStateException if all fails
      */
+    @SuppressWarnings("deprecation")
     public static String getMavenBasedir() {
         if (Maven.getMavenBasedir() != null) {
             return Maven.getMavenBasedir();
@@ -95,6 +95,7 @@ public class Surefire extends Maven {
      *
      * @return true iff being run as a single test (method, not a test unit!)
      */
+    @SuppressWarnings("deprecation")
     public static boolean isSingleTestExecution() {
         return isEclipseDirectSingleJUnit()
                 || Maven.getMavenBasedir() != null && System.getProperty("test", "").contains("#");

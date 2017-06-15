@@ -74,6 +74,7 @@ public class Parser {
     }
 
     // CHECKSTYLE IGNORE .* FOR NEXT 1 LINE
+    @SuppressWarnings("deprecation")
     public List<CheckStatus> parse(URL statusCgiUrl) throws IOException, ParseException {
         URLConnection conn = statusCgiUrl.openConnection();
         conn.setConnectTimeout(15000);

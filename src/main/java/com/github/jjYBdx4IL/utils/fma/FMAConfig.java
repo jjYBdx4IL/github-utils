@@ -59,6 +59,7 @@ public class FMAConfig {
     public FMAConfig() {
     }
     
+    @SuppressWarnings("deprecation")
     public static Object readConfig(String filename, Class<?> clazz) throws IOException {
         try {
             File configFile = new File(CFG_DIR, filename);

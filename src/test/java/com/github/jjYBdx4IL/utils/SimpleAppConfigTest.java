@@ -30,6 +30,7 @@ import static org.junit.Assert.*;
  *
  * @author jjYBdx4IL
  */
+@SuppressWarnings("deprecation")
 public class SimpleAppConfigTest {
 
     private static File TEMP_DIR = FileUtil.createMavenTestDir(SimpleAppConfigTest.class);

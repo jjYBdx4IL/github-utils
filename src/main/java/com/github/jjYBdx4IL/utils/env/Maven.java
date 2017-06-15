@@ -86,7 +86,7 @@ public class Maven extends JavaProcess {
      * @return the temporary test directory, usually something like
      *         '$basedir/target/$classRef".
      */
-    public static File getMavenTempTestDir(Class<?> classRef) {
+    public static File getTempTestDir(Class<?> classRef) {
         File tempDir = new File(getMavenBuildDir(classRef), classRef.getName());
         if (!tempDir.exists()) {
             tempDir.mkdirs();
@@ -129,6 +129,13 @@ public class Maven extends JavaProcess {
      * not via classes loaded from jar files. The directory structure is then
      * followed upwards until the maven project descriptor file pom.xml is
      * found.
+     * 
+     * <p>
+     * Why we do this: because the Eclipse-integrated JUnit test runner does not
+     * provide any information about the maven project's basedir, which is
+     * different from running junit tests via maven-surefire-plugin or
+     * maven-failsafe-plugin: there we have the 'basedir' system property.
+     * </p>
      *
      * @param classRef
      *            the class

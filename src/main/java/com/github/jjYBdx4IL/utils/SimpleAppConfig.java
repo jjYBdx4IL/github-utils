@@ -42,6 +42,7 @@ public class SimpleAppConfig implements AutoCloseable {
     private final DB db;
     private final ConcurrentMap<String, String> map;
 
+    @SuppressWarnings("unchecked")
     public SimpleAppConfig(Class<?> appClassRef) {
         dbFile = getDbFile(appClassRef);
         LOG.debug("opening config db at " + dbFile.getAbsolutePath());

@@ -75,7 +75,6 @@ public class TimeUtils {
         }
     }
 
-    @SuppressWarnings("AssignmentToMethodParameter")
     public static String millisToDuration(long millis) {
         StringBuilder sb = new StringBuilder();
         if (millis < 0) {

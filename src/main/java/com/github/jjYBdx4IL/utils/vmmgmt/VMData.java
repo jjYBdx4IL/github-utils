@@ -27,20 +27,15 @@ import java.util.Map;
 import java.util.Random;
 import java.util.regex.Pattern;
 
+import freemarker.template.TemplateException;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.connection.channel.direct.Session;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import freemarker.template.TemplateException;
 
 /**
  * @author jjYBdx4IL
  */
 public class VMData {
 
-    private static final Logger log = LoggerFactory.getLogger(VMData.class);
     public static final int SSH_MIN_PORT = 5000;
     public static final int SSH_MAX_PORT = 64000;
     public static final String VM_NAME_REGEX = "^[a-z][a-z0-9-]*$";

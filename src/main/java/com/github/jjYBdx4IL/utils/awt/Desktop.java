@@ -226,7 +226,6 @@ public class Desktop {
     }
 
 
-    @SuppressWarnings("AssignmentToForLoopParameter")
     private static String[] prepareCommand(String command, String args, String file) {
 
         List<String> parts = new ArrayList<>();

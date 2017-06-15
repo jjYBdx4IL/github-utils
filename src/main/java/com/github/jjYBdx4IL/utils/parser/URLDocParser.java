@@ -49,6 +49,7 @@ public abstract class URLDocParser<RESULT extends ParseResult> {
         }
     }
 
+    @SuppressWarnings("deprecation")
     public URLDocParser<RESULT> fetch() throws IOException {
         InputStream is = null;
         try {

@@ -95,6 +95,7 @@ public class AWTUtils {
                 AWTUtils.setPosition(dialog, screen, position);
 
                 if (timeoutMS > 0) {
+                    @SuppressWarnings("serial")
                     Timer timer = new Timer(timeoutMS, new AbstractAction() {
                         @Override
                         public void actionPerformed(ActionEvent ae) {

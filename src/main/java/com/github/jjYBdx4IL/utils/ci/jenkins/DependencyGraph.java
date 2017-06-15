@@ -22,6 +22,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,17 +34,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  *
  * @author jjYBdx4IL
  */
 public class DependencyGraph {
 
-    private static final Logger log = LoggerFactory.getLogger(DependencyGraph.class);
     public static final String URL_SUFFIX = "/depgraph-view/graph.json";
 
     private final URL jenkinsInstanceURL;
@@ -99,6 +96,7 @@ public class DependencyGraph {
         return queuedBuildJobs;
     }
 
+    @SuppressWarnings("deprecation")
     private void queueJob(String job, boolean dryRun) throws IOException {
         if (dryRun) {
             return;

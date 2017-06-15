@@ -36,9 +36,6 @@ import org.junit.Test;
 public class MergeTest {
 
     private static final File TARGET_DIR = FileUtil.createMavenTestDir(MergeTest.class);
-    private static final File PNG1_FILE = new File(TARGET_DIR, "test1.png");
-    private static final File PNG2_FILE = new File(TARGET_DIR, "test2.png");
-    private static final File PNG3_FILE = new File(TARGET_DIR, "test3.png");
 
     @Before
     public void before() {

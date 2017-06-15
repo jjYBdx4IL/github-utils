@@ -223,6 +223,7 @@ public class URLUtils {
     public static Map<String, String> readParamsIntoMap(String url, String charset) throws URISyntaxException {
         Map<String, String> params = new HashMap<>();
 
+        @SuppressWarnings("deprecation")
         List<NameValuePair> result = URLEncodedUtils.parse(new URI(url), charset);
 
         for (NameValuePair nvp : result) {

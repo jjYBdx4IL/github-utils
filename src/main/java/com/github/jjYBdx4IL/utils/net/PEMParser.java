@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
  *
  * @author Github jjYBdx4IL Projects
  */
-@SuppressWarnings("deprecation")
 public class PEMParser extends org.bouncycastle.openssl.PEMParser {
 
     private static final Logger log = LoggerFactory.getLogger(PEMParser.class);

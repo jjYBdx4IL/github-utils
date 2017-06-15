@@ -38,7 +38,7 @@ import org.junit.Test;
 public class ConstantClassCreatorTest {
 
     @SuppressWarnings("unused")
-	private final static Logger log = Logger.getLogger(ConstantClassCreatorTest.class.getName());
+    private final static Logger log = Logger.getLogger(ConstantClassCreatorTest.class.getName());
     private final static File tempDir = FileUtil.createMavenTestDir(ConstantClassCreatorTest.class);
 
     @Before
@@ -52,14 +52,11 @@ public class ConstantClassCreatorTest {
         String sysPropName = ConstantClassCreatorTest.class.getName() + ".key";
         String sysPropValue = ConstantClassCreatorTest.class.getName() + ".value";
         System.setProperty(sysPropName, sysPropValue);
-        main(new String[]{
-            "--" + OPTNAME_OUTPUT_DIRECTORY, tempDir.getAbsolutePath(),
-            "--" + OPTNAME_OUTPUT_CLASSNAME, classname,
-            "--" + OPTNAME_SYSPROP, sysPropName,
-            "--" + OPTNAME_SYSPROP, sysPropName + ".2"
-        });
+        main(new String[] { "--" + OPTNAME_OUTPUT_DIRECTORY, tempDir.getAbsolutePath(), "--" + OPTNAME_OUTPUT_CLASSNAME,
+                classname, "--" + OPTNAME_SYSPROP, sysPropName, "--" + OPTNAME_SYSPROP, sysPropName + ".2" });
 
         File outputFileName = new File(tempDir, "test" + File.separator + "Out.java");
+        @SuppressWarnings("deprecation")
         String content = IOUtils.toString(new FileInputStream(outputFileName));
         assertTrue(content, content.contains(String.format("\"%s\"", sysPropValue)));
         assertTrue(content, content.contains("null"));

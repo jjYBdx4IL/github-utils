@@ -25,6 +25,7 @@ import org.apache.commons.cli.ParseException;
  *
  * @author jjYBdx4IL
  */
+@SuppressWarnings("deprecation")
 public class ExtendedGnuParser extends GnuParser {
 
     private boolean ignoreUnrecognizedOption;

@@ -193,6 +193,7 @@ public class Text2ImageAppMainTest {
         app.setOptOutputFileName(PNG1_FILE.getPath());
         app.runConversion();
 
+        @SuppressWarnings("unused")
         BufferedImage img = ImageIO.read(PNG1_FILE);
 //        assertEquals(130, img.getWidth());
 //        assertEquals(83, img.getHeight());
@@ -206,6 +207,7 @@ public class Text2ImageAppMainTest {
         app.setOptOutputFileName(PNG1_FILE.getPath());
         app.runHtmlConversion();
 
+        @SuppressWarnings("unused")
         BufferedImage img = ImageIO.read(PNG1_FILE);
 //        assertEquals(800, img.getWidth());
 //        assertEquals(799, img.getHeight());
@@ -218,6 +220,7 @@ public class Text2ImageAppMainTest {
         }
         new Text2ImageAppMain().run(new String[]{"-i", HTML_FILE.getPath(), "-o", PNG1_FILE.getPath(),
             "--html", "--htmlWidth", "1"});
+        @SuppressWarnings("unused")
         BufferedImage img = ImageIO.read(PNG1_FILE);
 //        assertEquals(100, img.getWidth());
 //        assertEquals(20, img.getHeight());
@@ -230,6 +233,7 @@ public class Text2ImageAppMainTest {
         }
         new Text2ImageAppMain().run(new String[]{"-i", HTML_FILE.getPath(), "-o", PNG1_FILE.getPath(),
             "--html", "--htmlWidth", "1"});
+        @SuppressWarnings("unused")
         BufferedImage img = ImageIO.read(PNG1_FILE);
 //        assertEquals(100, img.getWidth());
 //        assertEquals(20, img.getHeight());
@@ -243,6 +247,7 @@ public class Text2ImageAppMainTest {
         }
         new Text2ImageAppMain().run(new String[]{"-i", HTML_FILE.getPath(), "-o", PNG1_FILE.getPath(),
             "--html", "--htmlWidth", "1"});
+        @SuppressWarnings("unused")
         BufferedImage img = ImageIO.read(PNG1_FILE);
 //        assertEquals(200, img.getWidth());
 //        assertEquals(20, img.getHeight());
@@ -255,6 +260,7 @@ public class Text2ImageAppMainTest {
         }
         new Text2ImageAppMain().run(new String[]{"-i", HTML_FILE.getPath(), "-o", PNG1_FILE.getPath(),
             "--html", "--htmlWidth", "1"});
+        @SuppressWarnings("unused")
         BufferedImage img = ImageIO.read(PNG1_FILE);
 //        assertEquals(100, img.getWidth());
 //        assertEquals(20, img.getHeight());

@@ -100,6 +100,7 @@ public class VMControl {
     }
 
     public void sshExec(String cmd) throws IOException {
+        @SuppressWarnings("resource")
         final SSHClient ssh = new SSHClient();
         ssh.addHostKeyVerifier(new PromiscuousVerifier());
         try {
@@ -191,6 +192,7 @@ public class VMControl {
         }
     }
 
+    @SuppressWarnings("resource")
     private SSHResources tryGetSSHSession() throws IOException {
         final SSHClient ssh = new SSHClient();
         Session session = null;

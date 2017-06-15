@@ -55,6 +55,7 @@ public class ProcPidStatusParser {
     }
 
     // package access for testing
+    @SuppressWarnings("deprecation")
     ProcPidStatusParser parse(File statFile) throws IOException {
 
         try (InputStream is = new FileInputStream(statFile)) {

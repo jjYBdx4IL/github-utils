@@ -44,6 +44,7 @@ public class DependencyGraphTest {
         server.close();
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testParseStream() throws Exception {
         String content = null;

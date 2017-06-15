@@ -49,10 +49,11 @@ public class BerlinAirQualityParserTest {
 
     @Test
     public void testParseValueBerlin1Txt() throws IOException, ParseException {
+        @SuppressWarnings("deprecation")
         String source = IOUtils.toString(getClass().getResourceAsStream("berlin1.txt"));
         AirQualityParseResult result = parser.setSourceDoc(source).parse().getResult(ID_PM10_VERKEHR);
         assertEquals(24, Integer.parseInt(result.getValue()));
-        
+
         // 01.07.2014 - 11:00 Uhr MESZ
         assertEquals(2014, result.getTime().get(Calendar.YEAR));
         assertEquals(6, result.getTime().get(Calendar.MONTH));
@@ -67,6 +68,7 @@ public class BerlinAirQualityParserTest {
 
     @Test
     public void testParseValueBerlin2Txt() throws IOException, ParseException {
+        @SuppressWarnings("deprecation")
         String source = IOUtils.toString(getClass().getResourceAsStream("berlin2.txt"));
         AirQualityParseResult result = parser.setSourceDoc(source).parse().getResult(ID_PM10_VERKEHR);
         assertEquals(21, Integer.parseInt(result.getValue()));

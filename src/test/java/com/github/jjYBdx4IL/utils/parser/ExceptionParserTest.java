@@ -39,6 +39,7 @@ public class ExceptionParserTest {
 
     @Test
     public void testParseFirst2() throws Exception {
+        @SuppressWarnings("deprecation")
         String input = IOUtils.toString(getRes(1));
         int exceptionLastLineIndex = 112;
         int exceptionStartLineIndex = 89;
@@ -61,6 +62,7 @@ public class ExceptionParserTest {
 
     @Test
     public void testParseFirst() throws Exception {
+        @SuppressWarnings("deprecation")
         String input = _extractLines(IOUtils.toString(getRes(1)), 90, 112);
 
         ParsedException result = ExceptionParser.parseFirst(new ByteArrayInputStream(input.getBytes()));

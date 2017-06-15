@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Github jjYBdx4IL Projects
  */
+@SuppressWarnings("deprecation")
 public class ConstantClassCreator {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConstantClassCreator.class);

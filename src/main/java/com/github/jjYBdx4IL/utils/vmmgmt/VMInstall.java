@@ -18,6 +18,13 @@ package com.github.jjYBdx4IL.utils.vmmgmt;
 //CHECKSTYLE:OFF
 import com.github.jjYBdx4IL.utils.cache.SimpleDiskCacheEntry;
 
+import org.apache.commons.compress.archivers.cpio.CpioArchiveEntry;
+import org.apache.commons.compress.archivers.cpio.CpioArchiveOutputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
+import org.apache.commons.io.IOUtils;
+import org.libvirt.Connect;
+import org.libvirt.LibvirtException;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,15 +32,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import org.apache.commons.compress.archivers.cpio.CpioArchiveEntry;
-import org.apache.commons.compress.archivers.cpio.CpioArchiveOutputStream;
-import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
-import org.apache.commons.io.IOUtils;
-import org.libvirt.Connect;
-import org.libvirt.LibvirtException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import freemarker.template.TemplateException;
 
@@ -43,7 +41,6 @@ import freemarker.template.TemplateException;
  */
 public class VMInstall {
     
-    private static final Logger log = LoggerFactory.getLogger(VMInstall.class);
     public static final int VM_INSTALLATION_TIMEOUT_SECS = 3600;
 
     private final VMData vm;

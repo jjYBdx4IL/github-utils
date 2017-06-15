@@ -25,6 +25,7 @@ import java.util.Map;
  * @author jjYBdx4IL
  * @param <T> an enumeration type used as keys
  */
+@Deprecated
 public class SimpleAppConfigForEnumKeys<T extends Enum<T>> extends SimpleAppConfig {
 
     public SimpleAppConfigForEnumKeys(Class<?> appClassRef) {

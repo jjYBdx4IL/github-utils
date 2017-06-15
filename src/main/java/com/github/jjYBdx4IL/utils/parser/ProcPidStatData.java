@@ -37,6 +37,7 @@ public class ProcPidStatData {
     }
 
     // package access for testing
+    @SuppressWarnings("deprecation")
     ProcPidStatData(File statFile) throws IOException {
         final String inputLine;
         try (InputStream is = new FileInputStream(statFile)) {
@@ -92,6 +93,8 @@ public class ProcPidStatData {
             case rt_priority: //: 0
             case policy: //: 0
                 return Long.valueOf(getRaw(entry));
+        default:
+            break;
         }
         throw new IllegalArgumentException(String.format("%s is not of type long", entry));
     }

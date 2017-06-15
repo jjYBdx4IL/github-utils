@@ -32,7 +32,7 @@ import org.junit.Test;
  */
 public class ZFSStatusParserTest {
 
-    private static final Logger log = Logger.getLogger(ZFSStatusParserTest.class.getName());
+    private static final Logger lOG = Logger.getLogger(ZFSStatusParserTest.class.getName());
 
     @Test
     public void testParse() throws IOException, ParseException {
@@ -59,7 +59,8 @@ public class ZFSStatusParserTest {
 
         for (int[] expectedResult : expectedResults) {
             String inputFileName = String.format("zpool_status_%d.txt", expectedResult[0]);
-            log.debug(inputFileName);
+            lOG.debug(inputFileName);
+            @SuppressWarnings("deprecation")
             String zpoolStatusCmdOutput = IOUtils.toString(
                     ZFSStatusParserTest.class.getResourceAsStream(inputFileName));
             try {
@@ -69,7 +70,7 @@ public class ZFSStatusParserTest {
                 assertEquals(inputFileName, expResult, actualResult);
             } catch (ParseException ex) {
                 assertEquals(inputFileName, expectedResult[1], -1);
-                log.debug(ex);
+                lOG.debug(ex);
             }
         }
     }

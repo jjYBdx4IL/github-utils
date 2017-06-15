@@ -37,6 +37,7 @@ public class ParserTest {
     @Test
     public void testParse() throws IOException, ParseException {
         Parser instance = new Parser();
+        @SuppressWarnings("deprecation")
         List<CheckStatus> results = instance.parse(IOUtils.toString(
                 ParserTest.class.getResourceAsStream("detailedStatusCgiDump1.html")));
 
@@ -68,6 +69,7 @@ public class ParserTest {
     @Test
     public void testParse2() throws IOException, ParseException {
         Parser instance = new Parser();
+        @SuppressWarnings("deprecation")
         List<CheckStatus> results = instance.parse(IOUtils.toString(
                 ParserTest.class.getResourceAsStream("detailedStatusCgiDump2.html")));
 
@@ -94,6 +96,7 @@ public class ParserTest {
     @Test
     public void testParse3() throws IOException, ParseException {
         Parser instance = new Parser();
+        @SuppressWarnings("deprecation")
         List<CheckStatus> results = instance.parse(IOUtils.toString(
                 ParserTest.class.getResourceAsStream("detailedStatusCgiDump3.html")));
 
@@ -124,6 +127,7 @@ public class ParserTest {
     @Test
     public void testParse4() throws IOException, ParseException {
         Parser instance = new Parser();
+        @SuppressWarnings("deprecation")
         List<CheckStatus> results = instance.parse(IOUtils.toString(
                 ParserTest.class.getResourceAsStream("detailedStatusCgiDump4.html")));
 
@@ -158,6 +162,7 @@ public class ParserTest {
     @Test
     public void testParse5() throws IOException, ParseException {
         Parser instance = new Parser();
+        @SuppressWarnings("deprecation")
         List<CheckStatus> results = instance.parse(IOUtils.toString(
                 ParserTest.class.getResourceAsStream("detailedStatusCgiDump5.html")));
 
@@ -183,6 +188,7 @@ public class ParserTest {
     @Test
     public void testGetEffectiveStatus() throws IOException, ParseException {
         Parser instance = new Parser();
+        @SuppressWarnings("deprecation")
         List<CheckStatus> results = instance.parse(IOUtils.toString(
                 ParserTest.class.getResourceAsStream("detailedStatusCgiDump5.html")));
 

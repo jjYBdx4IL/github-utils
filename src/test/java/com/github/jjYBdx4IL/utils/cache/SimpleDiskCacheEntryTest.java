@@ -15,11 +15,23 @@
  */
 package com.github.jjYBdx4IL.utils.cache;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 //CHECKSTYLE:OFF
 import com.github.jjYBdx4IL.junit.rules.SysPropsRestorerRule;
 import com.github.jjYBdx4IL.test.AdHocHttpServer;
 import com.github.jjYBdx4IL.test.FileUtil;
 import com.github.jjYBdx4IL.utils.cache.SimpleDiskCacheEntry.UpdateMode;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -34,26 +46,12 @@ import java.net.URL;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.junit.After;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.rules.TestRule;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  *
  * @author jjYBdx4IL
  */
 public class SimpleDiskCacheEntryTest {
 
-    private static final Logger log = LoggerFactory.getLogger(SimpleDiskCacheEntryTest.class);
     public static AdHocHttpServer server;
     private static final File cacheDir = FileUtil.createMavenTestDir(SimpleDiskCacheEntryTest.class);
 
@@ -228,23 +226,31 @@ public class SimpleDiskCacheEntryTest {
     private URL add(String relPath, String content) throws MalformedURLException {
         return server.addStaticContent(relPath, new AdHocHttpServer.StaticResponse(content));
     }
+
     private URL add(String relPath, String content, int sc) throws MalformedURLException {
         return server.addStaticContent(relPath, new AdHocHttpServer.StaticResponse(content, sc));
     }
+
+    @SuppressWarnings("deprecation")
     private String retrieveSameFile(URL url, UpdateMode updateMode) throws MalformedURLException, IOException {
-    	try (InputStream is = new SimpleDiskCacheEntry(url, new File(cacheDir, "test"), updateMode).getInputStream(false)) {
-    		return IOUtils.toString(is);    		
-    	}
+        try (InputStream is = new SimpleDiskCacheEntry(url, new File(cacheDir, "test"), updateMode)
+                .getInputStream(false)) {
+            return IOUtils.toString(is);
+        }
     }
+
+    @SuppressWarnings("deprecation")
     private String retrieve(URL url, UpdateMode updateMode) throws MalformedURLException, IOException {
-    	try (InputStream is = new SimpleDiskCacheEntry(url, updateMode).getInputStream(false)) {
-    		return IOUtils.toString(is);    		
-    	}
+        try (InputStream is = new SimpleDiskCacheEntry(url, updateMode).getInputStream(false)) {
+            return IOUtils.toString(is);
+        }
     }
+
+    @SuppressWarnings("deprecation")
     private String retrieveFallback(URL url, UpdateMode updateMode) throws MalformedURLException, IOException {
-    	try (InputStream is = new SimpleDiskCacheEntry(url, updateMode).getInputStream(true)) {
-    		return IOUtils.toString(is);    		
-    	}
+        try (InputStream is = new SimpleDiskCacheEntry(url, updateMode).getInputStream(true)) {
+            return IOUtils.toString(is);
+        }
     }
 
 }

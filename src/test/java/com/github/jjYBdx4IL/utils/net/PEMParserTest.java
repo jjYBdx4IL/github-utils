@@ -76,8 +76,7 @@ public class PEMParserTest {
      * 
      * @throws java.lang.Exception on error
      */
-    @SuppressWarnings("deprecation")
-	@Test
+    @Test
     public void testStripCommentsServerCert() throws Exception {
         try (PEMParser pemReader = new PEMParser(new InputStreamReader(
                 PEMParserTest.class.getResourceAsStream("ibm.com.cert.pem")))) {
@@ -113,7 +112,6 @@ public class PEMParserTest {
         }
     }
 
-    @SuppressWarnings("deprecation")
 	@Test
     public void testStripCommentsCACert() throws Exception {
         try (PEMParser pemReader = new PEMParser(new InputStreamReader(
