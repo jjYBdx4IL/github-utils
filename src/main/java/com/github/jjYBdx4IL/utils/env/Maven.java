@@ -155,7 +155,7 @@ public class Maven extends JavaProcess {
             throw new IllegalStateException("class " + classRef.getName()
                     + " has been loaded from resource not starting with file:/: " + classpathEntry);
         }
-        String cpEntryFileLoc = classpathEntry.substring("file:/".length());
+        String cpEntryFileLoc = classpathEntry.substring("file:".length());
         File projectBaseDir = new File(cpEntryFileLoc).getParentFile();
         while (projectBaseDir != null && !new File(projectBaseDir, "pom.xml").exists()) {
             projectBaseDir = projectBaseDir.getParentFile();

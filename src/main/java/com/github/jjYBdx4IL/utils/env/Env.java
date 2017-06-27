@@ -16,7 +16,6 @@
 package com.github.jjYBdx4IL.utils.env;
 
 //CHECKSTYLE:OFF
-import com.github.jjYBdx4IL.utils.AbstractConfig;
 import com.github.jjYBdx4IL.utils.windows.WindowsUtils;
 
 import java.io.File;
@@ -26,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 public class Env {
 
     private static final Logger LOG = LoggerFactory.getLogger(Env.class);
+    public static final Pattern APP_NAME_PATTERN = Pattern.compile("^[a-zA-Z0-9.]+$");
 
     private static List<String> getEnvPropDump() {
         List<String> lines = new ArrayList<>();
@@ -132,7 +133,7 @@ public class Env {
     }
     
     public static File getConfigDir(String appName) {
-        if (!AbstractConfig.APP_NAME_PATTERN.matcher(appName).find()) {
+        if (!APP_NAME_PATTERN.matcher(appName).find()) {
             throw new IllegalArgumentException("invalid app name: " + appName);
         }
         String localAppData = System.getenv("LOCALAPPDATA");
@@ -143,7 +144,7 @@ public class Env {
     }
     
     public static File getCacheDir(String appName) {
-        if (!AbstractConfig.APP_NAME_PATTERN.matcher(appName).find()) {
+        if (!APP_NAME_PATTERN.matcher(appName).find()) {
             throw new IllegalArgumentException("invalid app name: " + appName);
         }
         String localAppData = System.getenv("LOCALAPPDATA");
@@ -154,7 +155,7 @@ public class Env {
     }
     
     public static File getLogDir(String appName) {
-        if (!AbstractConfig.APP_NAME_PATTERN.matcher(appName).find()) {
+        if (!APP_NAME_PATTERN.matcher(appName).find()) {
             throw new IllegalArgumentException("invalid app name: " + appName);
         }
         String localAppData = System.getenv("LOCALAPPDATA");

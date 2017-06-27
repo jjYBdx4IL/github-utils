@@ -26,7 +26,9 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.AbstractAction;
 
@@ -46,7 +48,7 @@ import org.slf4j.LoggerFactory;
 public class AWTUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(AWTUtils.class);
-    
+
     public static final int POS_LEFT = 1, POS_CENTER_X = 2, POS_RIGHT = 4;
     public static final int POS_TOP = 8, POS_CENTER_Y = 16, POS_BOTTOM = 32;
 
@@ -54,14 +56,19 @@ public class AWTUtils {
 
     /**
      *
-     * @param screen -1 for all screens
-     * @param message the notification's message content
-     * @param position the notification's position
-     * @param timeoutMS the notification's duration
-     * @param closeableByUser whether the notification should be closeable by the user
+     * @param screen
+     *            -1 for all screens
+     * @param message
+     *            the notification's message content
+     * @param position
+     *            the notification's position
+     * @param timeoutMS
+     *            the notification's duration
+     * @param closeableByUser
+     *            whether the notification should be closeable by the user
      */
-    public static void showPopupNotification(final int screen, final String message,
-            final int position, final int timeoutMS, final boolean closeableByUser) {
+    public static void showPopupNotification(final int screen, final String message, final int position,
+            final int timeoutMS, final boolean closeableByUser) {
         if (screen == -1) {
             final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             final GraphicsDevice[] gd = ge.getScreenDevices();
@@ -74,7 +81,8 @@ public class AWTUtils {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                final JOptionPane optionPane = new JOptionPane(message, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+                final JOptionPane optionPane = new JOptionPane(message, JOptionPane.INFORMATION_MESSAGE,
+                        JOptionPane.DEFAULT_OPTION, null, new Object[] {}, null);
 
                 final JDialog dialog = new JDialog();
                 dialog.setModal(false);
@@ -140,12 +148,17 @@ public class AWTUtils {
     }
 
     /**
-     * Set JFrame location relative to a specific screen in a multi-screen setup.
+     * Set JFrame location relative to a specific screen in a multi-screen
+     * setup.
      *
-     * @param screen the target screen
-     * @param frame the window to position
-     * @param x coordinate relative to the given screen
-     * @param y coordinate relative to the given screen
+     * @param screen
+     *            the target screen
+     * @param frame
+     *            the window to position
+     * @param x
+     *            coordinate relative to the given screen
+     * @param y
+     *            coordinate relative to the given screen
      */
     public static void showOnScreen(int screen, JFrame frame, int x, int y) {
         final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -160,8 +173,10 @@ public class AWTUtils {
     /**
      * Center JFrame position on a specific screen in a multi-screen setup.
      *
-     * @param screen the screen to center the window on
-     * @param frame the window to center
+     * @param screen
+     *            the screen to center the window on
+     * @param frame
+     *            the window to center
      */
     public static void centerOnScreen(int screen, JFrame frame) {
         final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -177,7 +192,8 @@ public class AWTUtils {
     /**
      * Center JFrame position on the screen where the mouse is located.
      *
-     * @param window the window to center
+     * @param window
+     *            the window to center
      */
     public static void centerOnMouseScreen(Window window) {
         GraphicsDevice gd = MouseInfo.getPointerInfo().getDevice();
@@ -188,8 +204,10 @@ public class AWTUtils {
 
     /**
      *
-     * @param title the dialog title
-     * @param question the confirmation dialog's question
+     * @param title
+     *            the dialog title
+     * @param question
+     *            the confirmation dialog's question
      * @return true iff user pressed the yes button
      */
     public static boolean askForConfirmationOnMouseScreen(String title, String question) {
@@ -205,18 +223,20 @@ public class AWTUtils {
         }
 
         switch (dialogResult) {
-            case JOptionPane.YES_OPTION:
-                return true;
-            default:
-                return false;
+        case JOptionPane.YES_OPTION:
+            return true;
+        default:
+            return false;
         }
     }
 
     /**
      * Display some informational message.
      *
-     * @param title the dialog title
-     * @param text the dialog text
+     * @param title
+     *            the dialog title
+     * @param text
+     *            the dialog text
      */
     public static void showInfoDialogOnMouseScreen(String title, String text) {
         JOptionPane jOptionPane = new JOptionPane(text, JOptionPane.PLAIN_MESSAGE);
@@ -226,10 +246,13 @@ public class AWTUtils {
     }
 
     /**
-     * Determine screen index for the screen the mouse pointer is currently located on.
+     * Determine screen index for the screen the mouse pointer is currently
+     * located on.
      *
-     * @return the index for the array returned by GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()
-     * @throws RuntimeException if no screen could be found
+     * @return the index for the array returned by
+     *         GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()
+     * @throws RuntimeException
+     *             if no screen could be found
      */
     public static int getMousePointerScreenDeviceIndex() {
         GraphicsDevice myScreen = MouseInfo.getPointerInfo().getDevice();
@@ -256,48 +279,39 @@ public class AWTUtils {
         Container container = frame.getContentPane();
         JLabel label = new JLabel("Close me to continue...");
         container.add(label);
-        
+
         showFrameAndWaitForCloseByUser(frame);
     }
-    
+
     /**
      * Used for testing stuff interactively.
      * 
-     * @param frame the JFrame
+     * @param frame
+     *            the JFrame
      */
     public static void showFrameAndWaitForCloseByUser(final JFrame frame) {
         frame.pack();
         AWTUtils.centerOnMouseScreen(frame);
-        frame.addWindowListener(new WindowAdapter() {
+        final CountDownLatch latch = new CountDownLatch(1);
+        WindowListener listener = new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 LOG.trace("closing " + frame.isVisible() + " " + e.paramString());
-                synchronized (frame) {
-                    frame.notify();
-                }
+                latch.countDown();
             }
-        });
+        };
+        frame.addWindowListener(listener);
         frame.setVisible(true);
 
-        final AtomicBoolean done = new AtomicBoolean(false);
-        while (!done.get()) {
-            synchronized (frame) {
-                try {
-                    frame.wait(1000L);
-
-                    SwingUtilities.invokeAndWait(new Runnable() {
-                        @Override
-                        public void run() {
-                            done.set(!frame.isVisible());
-                        }
-                    });
-                } catch (InterruptedException | InvocationTargetException ex) {
-                    LOG.warn("", ex);
-                }
-            }
+        try {
+            latch.await();
+        } catch (InterruptedException ex) {
+            LOG.warn("", ex);
+        } finally {
+            frame.removeWindowListener(listener);
         }
     }
-    
+
     private AWTUtils() {
     }
 }
