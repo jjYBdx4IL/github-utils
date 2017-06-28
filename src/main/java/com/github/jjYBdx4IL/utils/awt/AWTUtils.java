@@ -24,11 +24,13 @@ import java.awt.MouseInfo;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.AbstractAction;
 
@@ -38,6 +40,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+
+import com.github.jjYBdx4IL.utils.env.Surefire;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -290,10 +295,42 @@ public class AWTUtils {
      *            the JFrame
      */
     public static void showFrameAndWaitForCloseByUser(final JFrame frame) {
+        showFrameAndWaitForCloseByUser(frame, -1L);
+    }
+
+    /**
+     * Used for testing stuff interactively. If a single unit test execution is
+     * detected, it will wait indefinitely for the user to close the frame.
+     * Otherwise it will automatically close the frame after one second to allow
+     * for somewhat fast test unit execution without disabling UI tests
+     * entirely.
+     * 
+     * @param frame
+     *            the JFrame
+     */
+    public static void showFrameAndWaitForCloseByUserTest(final JFrame frame) {
+        showFrameAndWaitForCloseByUser(frame, Surefire.isSingleTestExecution() ? -1L : 1000L);
+    }
+
+    /**
+     * Used for testing stuff interactively. Checks if current environment is
+     * headless.
+     * 
+     * @param frame
+     *            the JFrame
+     * @param timeoutMs
+     *            the timeout after which to close the frame automatically,
+     *            non-positive value to disable
+     */
+    public static void showFrameAndWaitForCloseByUser(final JFrame frame, final long timeoutMs) {
+        if (GraphicsEnvironment.isHeadless()) {
+            return;
+        }
+
         frame.pack();
         AWTUtils.centerOnMouseScreen(frame);
         final CountDownLatch latch = new CountDownLatch(1);
-        WindowListener listener = new WindowAdapter() {
+        final WindowListener listener = new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 LOG.trace("closing " + frame.isVisible() + " " + e.paramString());
@@ -304,12 +341,54 @@ public class AWTUtils {
         frame.setVisible(true);
 
         try {
-            latch.await();
+            if (timeoutMs < 0L) {
+                latch.await();
+            } else {
+                if (!latch.await(timeoutMs, TimeUnit.MILLISECONDS)) {
+                    close(frame);
+                }
+            }
         } catch (InterruptedException ex) {
             LOG.warn("", ex);
         } finally {
-            frame.removeWindowListener(listener);
+            try {
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    public void run() {
+                        frame.removeWindowListener(listener);
+                    }
+                });
+            } catch (InvocationTargetException ex) {
+                LOG.warn("", ex);
+            } catch (InterruptedException ex) {
+                LOG.warn("", ex);
+            }
         }
+    }
+
+    /**
+     * Sends a {@link WindowEvent#WINDOW_CLOSING} event to the JFrame, which
+     * closes it as if the user closed it manually.
+     * 
+     * <p>
+     * If this method is called on the EDT, it will send the event immediately.
+     * Else it will use {@link SwingUtilities#invokeLater}.
+     * </p>
+     * 
+     * @param frame
+     *            the JFrame to close
+     */
+    public static void close(final JFrame frame) {
+        if (SwingUtilities.isEventDispatchThread()) {
+            frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+            return;
+        }
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+            }
+        });
     }
 
     private AWTUtils() {
