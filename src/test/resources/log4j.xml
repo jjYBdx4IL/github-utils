@@ -8,6 +8,11 @@
         </layout>
     </appender>
 
+    <logger name="org.apache.http.wire" additivity="false">
+        <level value="trace"></level>
+        <appender-ref ref="stdout" />
+    </logger>
+    
     <logger name="com.github.jjYBdx4IL.utils" additivity="false">
         <level value="debug"></level>
         <appender-ref ref="stdout" />

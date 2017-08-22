@@ -16,21 +16,70 @@
 package com.github.jjYBdx4IL.utils.io;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class IoUtils {
 
     /**
+     * Perform POST operation and use application/x-www-form-urlencoded to send given parameters.
+     * This basically simulates a html form submission (post) operation.
+     * 
+     * @param url the remote service location
+     * @param params the application/x-www-form-urlencoded parameters
+     * @return the returned html page upon completing the POST operation
+     * @throws IOException on error
+     */
+    public static String toStringDoPost(URL url, String... params) throws IOException {
+        if (params.length % 2 == 1) {
+            throw new IllegalArgumentException();
+        }
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            HttpPost httpPost = new HttpPost(url.toExternalForm());
+
+            List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(params.length / 2);
+            for (int i = 0; i < params.length; i += 2) {
+                nameValuePair.add(new BasicNameValuePair(params[i], params[i + 1]));
+            }
+
+            // Url Encoding the POST parameters
+            try {
+                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair, "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                throw new IOException(e);
+            }
+
+            try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+                HttpEntity resEntity = response.getEntity();
+                Charset resCharset = getCharset(resEntity);
+                return IOUtils.toString(resEntity.getContent(), resCharset);
+            }
+        }
+    }
+
+    /**
      * similar to {@link IOUtils#toString(URL,String)}, but allows to define the
-     * accepted content type. The charset used to decode the remote's reply is taken from the reply headers.
+     * accepted content type. The charset used to decode the remote's reply is
+     * taken from the reply headers.
      * 
      * @param url
      *            the remote service location
@@ -51,8 +100,8 @@ public class IoUtils {
      * @param url
      *            the remote service location
      * @param charset
-     *            expected charset returned by remote service, used if headers returned by remote do not indicate
-     *            anything
+     *            expected charset returned by remote service, used if headers
+     *            returned by remote do not indicate anything
      * @param acceptHeader
      *            ie. "text/plain; charset=ASCII" or "text/html" etc.
      * @return the url's content
@@ -74,8 +123,8 @@ public class IoUtils {
      * @param url
      *            the remote service location
      * @param charset
-     *            expected charset returned by remote service, used if headers returned by remote do not indicate
-     *            anything
+     *            expected charset returned by remote service, used if headers
+     *            returned by remote do not indicate anything
      * @param acceptHeader
      *            ie. "text/plain; charset=ASCII" or "text/html" etc.
      * @return the url's content
@@ -103,7 +152,14 @@ public class IoUtils {
     }
 
     private static Charset getCharset(URLConnection connection) throws IOException {
-        String contentType = connection.getContentType();
+        return getCharset(connection.getContentType());
+    }
+
+    private static Charset getCharset(HttpEntity entity) throws IOException {
+        return getCharset(entity.getContentType().getValue());
+    }
+
+    private static Charset getCharset(String contentType) throws IOException {
         String[] values = contentType.split(";"); // values.length should be 2
         String charset = "";
 
