@@ -6,8 +6,8 @@
     <parent>
         <groupId>com.github.jjYBdx4IL</groupId>
         <artifactId>github-parent</artifactId>
-        <version>1.1-SNAPSHOT</version>
-        <relativePath>../github-parent</relativePath>
+        <version>1.1</version>
+        <relativePath/>
     </parent>
 
     <artifactId>github-utils</artifactId>

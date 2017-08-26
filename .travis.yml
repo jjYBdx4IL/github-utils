@@ -1,7 +1,4 @@
 language: java
-before_install:
-  - git clone https://github.com/jjYBdx4IL/github-parent
-  - mvn install -f github-parent -DskipTests
 env:
   - PUBLIC_CI=true
 jdk:
