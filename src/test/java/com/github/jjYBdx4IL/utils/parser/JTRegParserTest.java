@@ -15,9 +15,19 @@
  */
 package com.github.jjYBdx4IL.utils.parser;
 
-//CHECKSTYLE:OFF
-import com.github.jjYBdx4IL.test.PropertyRestorer;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import com.github.jjYBdx4IL.utils.junit4.PropertyRestorer;
 import com.github.jjYBdx4IL.utils.parser.JTRegParser.TestSuite;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.input.SAXBuilder;
+import org.junit.After;
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -26,15 +36,7 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Locale;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.input.SAXBuilder;
-import org.junit.After;
-import static org.junit.Assert.*;
-import org.junit.Test;
-
+//CHECKSTYLE:OFF
 /**
  *
  * @author Github jjYBdx4IL Projects

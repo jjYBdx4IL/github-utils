@@ -15,13 +15,15 @@
  */
 package com.github.jjYBdx4IL.utils.awt;
 
-//CHECKSTYLE:OFF
-import com.github.jjYBdx4IL.utils.awt.OctreeVisitor;
-import com.github.jjYBdx4IL.utils.awt.OctreeNode;
-import com.github.jjYBdx4IL.utils.awt.OctreeQuant;
-import com.github.jjYBdx4IL.test.InteractiveTestBase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import com.github.jjYBdx4IL.test.GraphicsResource;
-import com.github.jjYBdx4IL.utils.awt.ImageUtils;
+import com.github.jjYBdx4IL.utils.gfx.ImageUtils;
+import com.github.jjYBdx4IL.utils.junit4.InteractiveTestBase;
+
+import org.apache.log4j.Logger;
+import org.junit.Test;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -30,10 +32,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.log4j.Logger;
-import static org.junit.Assert.*;
-import org.junit.Test;
-
+// CHECKSTYLE:OFF
 /**
  *
  * @author Github jjYBdx4IL Projects

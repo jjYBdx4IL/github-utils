@@ -59,14 +59,14 @@ public class ResourceUtilsTest {
 
     @Test
     public void testExtractResourceFromClasspath() throws Exception {
-        File extracted = ResourceUtils.extractResource("/com/github/jjYBdx4IL/utils/ci/jenkins/jenkinsDep.json");
+        File extracted = ResourceUtils.extractResource("/log4j.xml");
         assertTrue(extracted.exists());
         String input = null;
         try (InputStream is = new FileInputStream(extracted)) {
             input = IOUtils.toString(is, "UTF-8");
         }
         assertTrue(extracted.delete());
-        assertTrue(input.contains("coherent-logic-fred-client-2nd-fork"));
+        assertTrue(input.contains("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"));
     }
 
     @Test

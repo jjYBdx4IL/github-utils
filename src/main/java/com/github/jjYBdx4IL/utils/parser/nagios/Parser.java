@@ -15,8 +15,13 @@
  */
 package com.github.jjYBdx4IL.utils.parser.nagios;
 
-//CHECKSTYLE:OFF
-import com.github.jjYBdx4IL.utils.TimeUtils;
+import com.github.jjYBdx4IL.utils.time.TimeUtils;
+
+import org.apache.commons.io.IOUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.net.URL;
@@ -31,17 +36,14 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.IOUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
+// CHECKSTYLE:OFF
 /**
  * Nagios status cgi parser.
  * 
  * <p>
- * Parses output from http://you.nagios.host.com/nagios3/cgi-bin/status.cgi?host=all&amp;style=detail.</p>
+ * Parses output from
+ * http://you.nagios.host.com/nagios3/cgi-bin/status.cgi?host=all&amp;style=detail.
+ * </p>
  *
  * @author Github jjYBdx4IL Projects
  */
@@ -57,8 +59,8 @@ public class Parser {
     private static final String STATUS_INFORMATION = "Status Information";
     private static final String SPACE = "&nbsp;";
     private static final String ACK_SELECTOR = "td[class$=ACK]";
-    private static final String DOWNTIME_SELECTOR
-            = "img[alt^=This service is currently in a period of scheduled downtime]";
+    private static final String DOWNTIME_SELECTOR =
+        "img[alt^=This service is currently in a period of scheduled downtime]";
     private static final Pattern ATTEMPTS_PATTERN = Pattern.compile("(\\d+)/(\\d+)");
     private final SimpleDateFormat lastCheckParser = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
     private String html;
@@ -86,7 +88,7 @@ public class Parser {
     // CHECKSTYLE IGNORE .* FOR NEXT 1 LINE
     public List<CheckStatus> parse() throws ParseException {
         Document doc = Jsoup.parse(html);
-        //logger.info(doc.toString());
+        // logger.info(doc.toString());
         // CHECKSTYLE IGNORE MagicNumber FOR NEXT 1 LINE
         Map<String, Integer> colMap = new HashMap<>(10);
 
@@ -103,16 +105,16 @@ public class Parser {
         List<CheckStatus> res = new ArrayList<>(10);
         String defaultHost = null;
         for (Element tr : doc.select("html > body > table > tbody > tr")) {
-//            for(Element p : e.parents()) {
-//                logger.debug(p.tagName());
-//            }
-            //logger.debug("row: " + tr);
+            // for(Element p : e.parents()) {
+            // logger.debug(p.tagName());
+            // }
+            // logger.debug("row: " + tr);
             Elements tds = tr.select(":root > td");
             if (tds.size() < MIN_COLS) {
                 continue;
             }
 
-//            logger.info("found td's: " + tds);
+            // logger.info("found td's: " + tds);
             String htmlBuf;
 
             final String host;
@@ -159,8 +161,7 @@ public class Parser {
                 try {
                     lastCheck = lastCheckParser.parse(htmlBuf);
                 } catch (java.text.ParseException ex) {
-                    throw new ParseException(
-                            String.format("failed to parse last-check field: '%s'", htmlBuf), ex);
+                    throw new ParseException(String.format("failed to parse last-check field: '%s'", htmlBuf), ex);
                 }
             }
 
@@ -184,8 +185,8 @@ public class Parser {
 
             downtime = !tds.get(colMap.get(SERVICE)).select(DOWNTIME_SELECTOR).isEmpty();
 
-            CheckStatus checkStatus = new CheckStatus(host, service, status, lastCheck, durationMillis,
-                    attempt, maxAttempts, statusInfo, ack, downtime);
+            CheckStatus checkStatus = new CheckStatus(host, service, status, lastCheck, durationMillis, attempt,
+                maxAttempts, statusInfo, ack, downtime);
             res.add(checkStatus);
             defaultHost = checkStatus.getHost();
         }

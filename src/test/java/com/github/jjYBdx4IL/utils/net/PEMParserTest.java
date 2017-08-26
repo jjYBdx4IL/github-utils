@@ -15,9 +15,18 @@
  */
 package com.github.jjYBdx4IL.utils.net;
 
-//CHECKSTYLE:OFF
-import com.github.jjYBdx4IL.test.PropertyRestorer;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import com.github.jjYBdx4IL.utils.junit4.PropertyRestorer;
 import com.github.jjYBdx4IL.utils.net.SSLUtils.PrincipalParts;
+
+import org.bouncycastle.cert.X509CertificateHolder;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.io.InputStreamReader;
 import java.security.Provider;
@@ -30,14 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.bouncycastle.cert.X509CertificateHolder;
-import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.junit.AfterClass;
-import static org.junit.Assert.*;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
+// CHECKSTYLE:OFF
 /**
  * openssl s_client -showcerts -connect www.ibm.com:443
  *

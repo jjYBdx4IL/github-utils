@@ -15,10 +15,16 @@
  */
 package com.github.jjYBdx4IL.utils.parser;
 
-//CHECKSTYLE:OFF
-import com.github.jjYBdx4IL.utils.TimeUtils;
-import com.github.jjYBdx4IL.utils.parser.ExceptionParser.ParsedException;
 import static com.github.jjYBdx4IL.utils.text.Unicode.removeNonprintableCharacters;
+
+import com.github.jjYBdx4IL.utils.parser.ExceptionParser.ParsedException;
+import com.github.jjYBdx4IL.utils.time.TimeUtils;
+
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.output.Format;
+import org.jdom2.output.LineSeparator;
+import org.jdom2.output.XMLOutputter;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -36,12 +42,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.output.Format;
-import org.jdom2.output.LineSeparator;
-import org.jdom2.output.XMLOutputter;
-
+// CHECKSTYLE:OFF
 /**
  *
  * @author Github jjYBdx4IL Projects

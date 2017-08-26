@@ -15,12 +15,15 @@
  */
 package com.github.jjYBdx4IL.utils.parser;
 
-//CHECKSTYLE:OFF
-import com.github.jjYBdx4IL.test.RegularExpressionTestBase;
-import static com.github.jjYBdx4IL.utils.parser.RegularExpression.*;
+import static com.github.jjYBdx4IL.utils.parser.RegularExpression.JAVA_TYPENAME;
+import static com.github.jjYBdx4IL.utils.parser.RegularExpression.JAVA_TYPENAME_ARG_PKGNAME;
+import static com.github.jjYBdx4IL.utils.parser.RegularExpression.JAVA_TYPENAME_ARG_SIMPLENAME;
+
+import com.github.jjYBdx4IL.utils.junit4.RegularExpressionTestBase;
 
 import org.junit.Test;
 
+//CHECKSTYLE:OFF
 /**
  *
  * @author Github jjYBdx4IL Projects
