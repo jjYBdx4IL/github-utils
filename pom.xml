@@ -102,7 +102,6 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <version>1.5.0</version>
                         <!-- native lib build (for ResourceUtils.loadLibrary test) only supported on linux/gnu systems -->
                         <executions>
                             <execution>
@@ -134,35 +133,22 @@
         <dependency>
             <groupId>com.github.jjYBdx4IL</groupId>
             <artifactId>diskcache</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.jjYBdx4IL</groupId>
-            <artifactId>github-test-utils</artifactId>
-            <version>1.1-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.jjYBdx4IL</groupId>
-            <artifactId>github-test-utils</artifactId>
-            <classifier>tests</classifier>
-            <version>1.1-SNAPSHOT</version>
-            <scope>test</scope>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>com.github.jjYBdx4IL.utils</groupId>
             <artifactId>env-utils</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>com.github.jjYBdx4IL.utils</groupId>
             <artifactId>net-utils</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>com.github.jjYBdx4IL.utils</groupId>
             <artifactId>proc-utils</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
 
         <!-- sorted by artifactId -->
@@ -302,13 +288,13 @@
         <dependency>
             <groupId>com.github.jjYBdx4IL.utils</groupId>
             <artifactId>gfx-utils</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.github.jjYBdx4IL.utils</groupId>
             <artifactId>selenium-test-utils</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
