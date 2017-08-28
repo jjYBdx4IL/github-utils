@@ -15,6 +15,9 @@
  */
 package com.github.jjYBdx4IL.utils.parser;
 
+import com.github.jjYBdx4IL.parser.ParseException;
+import com.github.jjYBdx4IL.parser.URLDocParser;
+
 //CHECKSTYLE:OFF
 import java.util.ArrayList;
 import java.util.Calendar;

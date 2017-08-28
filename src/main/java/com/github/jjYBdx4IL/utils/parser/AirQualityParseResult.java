@@ -15,6 +15,8 @@
  */
 package com.github.jjYBdx4IL.utils.parser;
 
+import com.github.jjYBdx4IL.parser.ParseResult;
+
 //CHECKSTYLE:OFF
 import java.util.Calendar;
 

@@ -15,17 +15,20 @@
  */
 package com.github.jjYBdx4IL.utils.parser;
 
-//CHECKSTYLE:OFF
 import static com.github.jjYBdx4IL.utils.parser.BerlinAirQualityParser.ID_PM10_VERKEHR;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import com.github.jjYBdx4IL.parser.ParseException;
+
+import org.apache.commons.io.IOUtils;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Calendar;
 
-import org.apache.commons.io.IOUtils;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
-
+// CHECKSTYLE:OFF
 /**
  *
  * @author Github jjYBdx4IL Projects
