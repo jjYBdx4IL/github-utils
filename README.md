@@ -1,3 +1,5 @@
-# github-utils
 
-[![Build Status](https://travis-ci.org/jjYBdx4IL/github-utils.png?branch=master)](https://travis-ci.org/jjYBdx4IL/github-utils)
+## NOTE / DEPRECATION WARNING
+
+This repository is deprecated. It has been refactored into multiple smaller modules. Those can be found
+mostly in the new 'misc' repository located at https://github.com/jjYBdx4IL/misc .

@@ -15,6 +15,9 @@
  */
 package com.github.jjYBdx4IL.utils.net;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 //CHECKSTYLE:OFF
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -22,9 +25,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
